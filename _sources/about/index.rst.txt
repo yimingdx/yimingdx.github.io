@@ -1,0 +1,10 @@
+.. _about:
+
+=====
+About
+=====
+
+Please kindly familiarize yourself with my profile on `LinkedIn`_ and contact me at yiming [dot] dai [at] outlook [dot] com.
+
+
+.. _LinkedIn: https://www.linkedin.com/in/yimingdai/

@@ -1,0 +1,359 @@
+:html_theme.sidebar_secondary.remove: true
+
+.. _shell_script_guide:
+
+=========================
+Shell Script Guide
+=========================
+
+Bourne-again shell, or bash, files start with a line determing the specific shell to run on. On Mac OS X, a bash file starts with
+
+.. code-block:: bash
+    
+    #!/bin/bash
+
+Command ``echo`` reads one or inputs and outputs them separated by a space by default.
+
+.. code-block:: shell-session
+    
+    $ echo Hello World
+    Hello World
+    $ echo "Hello"    World
+    Hello World
+
+A variable is defined by ``=`` and no spaces exist to avoid errors.
+
+.. code-block:: shell-session
+    
+    $ VAR="Hello World"
+    $ echo $VAR
+    Hello World
+
+For a variable to be recognized during the execution of a file, we need to ``export`` it. Suppose a file ``script.sh`` is created with contents to ``echo`` a variable.
+
+.. code-block:: bash
+    
+    #!/bin/bash
+    echo "VAR is $VAR"
+    VAR="New World"
+    echo "VAR is $VAR"
+
+If we run the file now, we will get VAR printed as blank since no local variable named VAR is defined within the file since a new shell session is opened to execute the file.
+
+.. code-block:: shell-session
+    
+    $ chmod a+x script.sh
+    $ ./script.sh
+    VAR is
+    VAR is New World
+
+If we export the variable VAR and then run the script, we could access the external value for the variable VAR.
+
+.. code-block:: shell-session
+    
+    $ export VAR
+    $ ./script.sh
+    VAR is Hello World
+    VAR is New World
+
+Note that the value of VAR in current shell is not changed.
+
+The dot ``.`` command could source the script, running the script within current shell. Hence, the value of VAR in current shell is updated.
+
+.. code-block:: shell-session
+
+    $ VAR="Hello World"
+    $ export VAR
+    $ . ./script.sh
+    VAR is Hello World
+    VAR is New World
+    $ echo $VAR
+    New World
+
+Command ``read`` reads a one-line input converted as a string and saves to a variable. Suppose a file name is needed from the user to create a file using ``touch`` in a fixed format. The procedure is shown.
+
+.. code-block:: shell-session
+
+    $ read USER_NAME
+    $ touch "${USER_NAME}_Bib"
+
+.. note::
+    
+    When using `touch` to create a file above, two common errors exist:
+
+    - ``"USER_NAME_Bib"`` is not valid since variable not defined.
+    - ``${USER_NAME}_Bib`` possibly create multiple files if spaces exist in the value of variable USER_NAME.
+
+Characters interpreted by the shell within double quotes are ``"``, ``$``, ``\```, and ``\\``.
+
+Basic ``for`` loop through values not restricted to integers.
+
+
+.. code-block:: bash
+
+    for i in name 6 *
+    do
+        echo "$i"
+    done
+
+With ``*`` retrieving all names of the files and directories in the current path, the result will be expected.
+
+::
+
+    name
+    6
+    <name of the first file or directory>
+    ...
+    <name of the last file or directory>
+
+A trick for ``for`` loop is using curly brackets.
+
+.. code-block:: shell-session
+
+    $ echo item_{0,1,2}
+    item_0 item_1 item_2
+
+A ``while`` loop with a condition is shown.
+
+.. code-block:: bash
+
+    INPUT=""
+    while [ "$INPUT" != "q" ]
+    do
+        echo "enter a option (q to quit)"
+        read INPUT
+    done
+
+
+The colon ``:`` in while loop always evaluates to true, with real exit command usually be <CTRL> + <C>.
+
+.. code-block:: bash
+
+    while :
+    do
+        echo "enter an input (^C to quit)"
+        read INPUT
+        echo $INPUT
+    done
+
+Suppose we want to process each line of a file and determine the language, a ``while read`` structure is adapted.
+
+.. code-block:: bash
+
+    while read current_line
+    do
+        case $current_line in
+            hello)   echo English ;;
+            bonjour) echo French  ;;
+            bye)     break        ;;
+            *)       echo Null    ;;
+        esac
+    done < file.txt
+
+The while loop ends when ``break`` is executed. If we want to terminate the entire program, we could ``exit``.
+
+In the first example of while loop, we write the condition within squared brackets. The shell test the condition using ``test``, or ``[``, command automatically. Hence, spaces must be reserved after ``[`` to ensure the command to be executed.
+
+.. code-block:: bash
+
+    if [ $X -le 10 ]; then
+        echo "X <= 10"
+    fi
+
+Logical operator can be used instead of control flows. To illustrate, above bash script is equivalent to
+
+.. code-block:: shell-session
+
+    $ [ $X -le 10 ] && echo "X <= 10" || echo "X > 10"
+    X <= 10
+
+Quotes could be necessary in situations of testing. ``-n`` flag tests whether the input has length greater then zero. If we are testing the length of an input, we have to quote it, or nothing is tested.
+
+.. code-block:: bash
+
+    while [ -n "$INPUT" ]
+    do
+        echo "enter an option"
+        read X
+    done
+
+The bash script above keep reading inputs until the length of the input is zero, for example the <ENTER> keystroke. If we forget to quote ``$INPUT``, the condition to test becomes ``[ -n ]`` instead of ``[ -n "" ]``, resulting undesired output.
+
+``;`` represents a newline, equivalent to a real newline, while ``\\`` represents that the contents on the next line is an extension of current line.
+
+Built-in variables are helpful for environmental check:
+
+- ``$0 - $9``: each input parameters
+- ``$#``: number of input parameters
+- ``$@``: all input parameters
+- ``$*``: all input parameters separated without quotes and whiltespaces
+- ``$?``: exit value of the terminated command, with zero to represent successful execution
+- ``$$``: PID, or Process IDentifier, of the current shell
+- ``$!``: PID of the last running background process
+- ``IFS``: Internal Field Separator with default value as <SPACE>, <TAB>, and <NEWLINE>
+
+The symbol ``&`` is used to run a command in background.
+
+.. code-block:: shell-session
+
+    $ ls &  echo "PID of ls = $\!"
+    [1] 88690
+    PID of ls = 88690
+    test.sh
+    [1]  + 88690 done       ls -G
+
+Note that ``$@`` and ``$*`` are identical without quotes. With quotes, ``$@`` separates parameters and ``$*`` treats all parameters as a single parameter. If more than nine parameters are given, ``shift`` command is used. We illustrate above concepts with the file names `echo_args.sh` and `diff.sh` defined below, respectively.
+
+.. code-block:: bash
+
+    #!/bin/bash
+    echo "$1"
+    echo "$2"
+    echo "$3"
+    
+.. code-block:: bash
+
+    #!/bin/bash
+    echo "basename: `basename $0`"
+    echo "number of parameters: $#"
+    echo "all parameters by \$@ with quotes:"
+    ./echo_args.sh "$@"
+    echo "all parameters by \$* with quotes:"
+    ./echo_args.sh "$*"
+    echo "all parameters by \$@ without quotes:"
+    ./echo_args.sh $@
+    echo "all parameters by \$* without quotes:"
+    ./echo_args.sh $*
+    echo "shift all parameters:"
+    while [ "$#" -gt "0" ]
+    do
+    	echo -en "$1 "
+        shift
+    done
+
+.. code-block:: shell-session
+
+    $ ./diff.sh arg1 "arg2 arg3" arg4
+    basename: test.sh
+    number of parameters: 3
+    all parameters by $@ with quotes:
+    arg1
+    arg2 arg3
+    arg4
+    all parameters by $* with quotes:
+    arg1 arg2 arg3 arg4
+
+
+    all parameters by $@ without quotes:
+    arg1
+    arg2
+    arg3
+    all parameters by $* without quotes:
+    arg1
+    arg2
+    arg3
+    shift all parameters:
+    arg1 arg2 arg3 arg4
+
+The ``shift`` command changes the value of ``$@`` and ``$*`` where the shifted parameters will be removed from them.
+
+Special symbol ``:-`` is commonly used to provide default value when no inputs are received. Instead, the symbol ``:=`` also set the value of the variable to the default value for future use.
+
+.. code-block:: bash
+
+    #!/bin/bash
+    echo -en "enter a name [ Yiming ] "
+    read name
+    echo "name is ${name:-Yiming}"
+    echo "echo and set default name:"
+    echo "name is ${name:=Yiming}"
+    echo "$name"
+
+.. code-block:: shell-session
+
+    $ ./read_name.sh
+    enter a name [ Yiming ]
+    name is Yiming
+    echo and set default name:
+    name is Yiming
+    Yiming
+    $ ./read_name.sh
+    enter a name [ Yiming ] Avril
+    name is Avril
+    echo and set default name:
+    name is Avril
+    Avril
+
+The backtick ``\``` encloses text and runs within external terminal shell. A proper use can improve efficiency. To illustrate,
+
+.. code-block:: shell-session
+
+    $ find . -name "*.sh" -print
+    ./echo_args.sh
+    ./read_name.sh
+    ./echo_each.sh
+    ./test.sh
+    $ find . -name "*.sh" -print | grep "/read_name.sh$"
+    ./read_name.sh
+    $ find . -name "*.sh" -print | grep "/echo_each.sh$"
+    ./echo_each.sh
+
+could be improved by script below.
+
+.. code-block:: bash
+
+    #!/bin/bash
+    FILES=`find . -name "*.sh" -print`
+    echo "FILES" | grep "/read_name.sh$"
+    echo "FILES" | grep "/echo_each.sh$"
+
+The parameter ``$1 - $9, $@, $*`` of a function will be accessed within a function. If we want to access the value of ``$1 - $9, $@, $*`` of the script, extra variables must be used to store their values. Other parameters are regarded as global variable without scopes.
+
+.. code-block:: bash
+
+    #!/bin/bash
+    f() {
+        echo "$@"
+        i=6
+    }
+
+    echo "$@"
+    i=1
+    echo "i = $i"
+    f f1 f2 f3
+    echo "i = $i"
+
+.. code-block:: shell-session
+
+    $ ./scope.sh g1 g2 g3
+    g1 g2 g3
+    i = 1
+    f1 f2 f3
+    i = 6
+
+Recursion is achieved with backtick.
+
+.. code-block:: bash
+
+    #!/bin/bash
+    factorial() {
+        if [ "$1" -gt "1" ]; then
+            i=`expr $1 - 1`
+            j=`factorial $i`
+            curr=`expr $1 \* $j`
+            echo $curr
+        else
+            echo 1
+        fi
+    }
+
+    while :
+    do
+        echo "enter a number, return the factorial"
+        read num
+        factorial $num
+    done
+
+When modularization is adopted, functions will be classified and modularized into different files. These files do not have the shebang as the first line. Suppose a file named ``tools.lib`` exists, we can import it using ``. ./tools.lib``.
+
+Functions can have return values, catching the value by external variables.

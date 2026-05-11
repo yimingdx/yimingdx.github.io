@@ -1,0 +1,926 @@
+.. _pandas_guide:
+
+=========================
+pandas Guide
+=========================
+
+This is an elegant-design introduction to pandas, geared mainly for new users. You can see more complex recipes at `pandas`_.  Note that this introduction refers to the official documentation, so pandas has copyright to part of the content. The author enhances by adding more detailed examples and explanations for easier comprehension.
+
+Customarily, we import as follows:
+
+.. ipython:: python
+
+   import numpy as np
+   import pandas as pd
+
+
+Object creation
+-------------------------
+
+Creating a ``Series`` by passing a list of values, letting pandas create a default integer index:
+
+.. ipython:: python
+
+   s = pd.Series([1, 3, 5, np.nan, 6, 8]); s
+
+Creating a ``DataFrame`` by passing a Numpy array, with a datetime index and labeled columns:
+
+.. ipython:: python
+
+   dates = pd.date_range("20210801", periods=6)
+   dates
+   df = pd.DataFrame(np.random.randn(6, 4), index=dates, columns=list("ABCD"))
+   df
+
+Creating a ``DataFrame`` by passing a dict of objects that can be converted to series-like:
+
+.. ipython:: python
+
+   df2 = pd.DataFrame(
+       {
+           "A": 4.0,
+           "B": pd.Timestamp("20210801"),
+           "C": pd.Series(1, index=list(range(4)), dtype="float64"),
+           "D": np.array([3] * 4, dtype="int64"),
+           "E": pd.Categorical(["test", "train", "test", "train"]),
+           "F": "cat",
+       }
+   )
+   df2
+
+The columns of the resulting ``DataFrame`` have different dtypes:
+
+.. ipython:: python
+
+   df2.dtypes
+
+or the data type for a specific column:
+
+.. ipython:: python
+
+   df2.A.dtype
+
+If you're using IPython, tab completion for public attributes is automatically enabled. Here's a subset of the attributes that will be completed:
+
+.. ipython::
+
+   @verbatim
+   In [1]: df2.<TAB>  # noqa: E225, E999
+   df2.A                  df2.bool
+   df2.abs                df2.boxplot
+   df2.add                df2.C
+   df2.add_prefix         df2.clip
+   df2.add_suffix         df2.columns
+   df2.align              df2.copy
+   df2.all                df2.count
+   df2.any                df2.combine
+   df2.append             df2.D
+   df2.apply              df2.describe
+   df2.applymap           df2.diff
+   df2.B                  df2.duplicated
+
+
+Viewing data
+-------------------------
+
+Here is how to view the top and bottom rows of the frame:
+
+.. ipython:: python
+
+   df.head()
+   df.tail(3)
+
+Display the index, columns:
+
+.. ipython:: python
+
+   df.index
+   df.columns
+
+Display the shape, dimension:
+
+.. ipython:: python
+
+   df.shape
+   df.ndim
+
+.. note::
+   
+   ``DataFrame.to_numpy`` gives a Numpy representation of the underlying data.Note that this can be an expensive operation when your ``DataFrame`` has columns with different data types, which comes down to a fundamental difference between pandas and Numpy: **Numpy arrays have one dtype for the entire array, while pandas DataFrames have one dtype per column**. When you call ``DataFrame.to_numpy``, pandas will find the Numpy dtype that can hold **all** of the dtypes in the DataFrame. This may end up being ``object``, which requires casting every value to a Python object.
+
+For ``df``, our ``DataFrame`` of all floating-point values, ``DataFrame.to_numpy`` is fast and doesn't require copying data.
+
+.. ipython:: python
+
+   df.to_numpy()
+
+For ``df2``, the ``DataFrame`` with multiple dtypes, ``DataFrame.to_numpy`` is relatively expensive.
+
+.. ipython:: python
+
+   df2.to_numpy()
+
+.. note::
+
+   ``DataFrame.to_numpy`` does not include the index or column labels in the output.
+
+``DataFrame.describe`` shows a quick statistic summary of your data:
+
+.. ipython:: python
+
+   df.describe()
+
+``DateFrame.info`` show information about dataset
+
+.. ipython:: python
+
+   df.info()
+
+Locate and aggregate NaN values column-wise:
+
+.. ipython:: python
+
+   df.isnull().sum().sort_values(ascending=False)
+
+Find the total number of NaN values
+
+.. ipython:: python
+
+   df.isna().sum().sum() # identical to isnull() here
+
+Transposing your data:
+
+.. ipython:: python
+
+   df.T
+
+Sorting by an axis:
+
+.. ipython:: python
+
+   df.sort_index(axis=1, ascending=False)
+
+Sorting by values:
+
+.. ipython:: python
+
+   df.sort_values(by="B")
+
+
+Selection
+-------------------------
+
+.. note::
+
+   While standard Python / Numpy expressions for selecting and setting are intuitive and come in handy for interactive work, for production code, we recommend the optimized pandas data access methods, ``.at``, ``.iat``, ``.loc`` and ``.iloc``.
+
+Getting
+~~~~~~~
+
+Selecting a single column, which yields a ``Series``, equivalent to ``df.A``:
+
+.. ipython:: python
+
+   df["A"]
+
+Selecting via ``[]``, which slices the rows.
+
+.. ipython:: python
+
+   df[0:3]
+   df["20210802":"20210804"]
+
+Selection by label
+~~~~~~~~~~~~~~~~~~
+
+For getting a cross section using a label:
+
+.. ipython:: python
+
+   df.loc[dates[0]]
+
+Selecting on a multi-axis by label:
+
+.. ipython:: python
+
+   df.loc[:, ["A", "B"]]
+
+Showing label slicing, both endpoints are *included*:
+
+.. ipython:: python
+
+   df.loc["20210802":"20210804", ["A", "B"]]
+
+Reduction in the dimensions of the returned object:
+
+.. ipython:: python
+
+   df.loc["20210802", ["A", "B"]]
+
+For getting a scalar value:
+
+.. ipython:: python
+
+   df.loc[dates[0], "A"]
+
+For getting fast access to a scalar (equivalent to the prior method):
+
+.. ipython:: python
+
+   df.at[dates[0], "A"]
+
+Selection by position
+~~~~~~~~~~~~~~~~~~~~~
+
+Select via the position of the passed integers:
+
+.. ipython:: python
+
+   df.iloc[3]
+
+By integer slices, acting similar to Numpy/Python:
+
+.. ipython:: python
+
+   df.iloc[3:5, 0:2]
+
+By lists of integer position locations, similar to the Numpy/Python style:
+
+.. ipython:: python
+
+   df.iloc[[1, 2, 4], [0, 2]]
+
+For slicing rows explicitly:
+
+.. ipython:: python
+
+   df.iloc[1:3, :]
+
+For slicing columns explicitly:
+
+.. ipython:: python
+
+   df.iloc[:, 1:3]
+
+For getting a value explicitly:
+
+.. ipython:: python
+
+   df.iloc[1, 1]
+
+For getting fast access to a scalar (equivalent to the prior method):
+
+.. ipython:: python
+
+   df.iat[1, 1]
+
+Selection by dtype
+~~~~~~~~~~~~~~~~~~
+
+.. ipython:: python
+
+   titanic = pd.DataFrame(
+       {
+           "age": [22, 38, 26, 35],
+           "fare": [7.25, 71.28, 7.92, 53.10],
+           "name": ["Allen", "Cumings", "Heikkinen", "Futrelle"],
+           "survived": [0, 1, 1, 1],
+           "embarked": ["S", "C", "S", "S"],
+       }
+   )
+   titanic.head()
+   titanic.select_dtypes(include=['datetime', 'number']).head()
+   titanic.select_dtypes(exclude=['object', 'double']).head()
+
+Boolean indexing
+~~~~~~~~~~~~~~~~
+
+Using a single column's values to select data.
+
+.. ipython:: python
+
+   df[df["A"] > 0]
+
+Selecting values from a DataFrame where a boolean condition is met.
+
+.. ipython:: python
+
+   df[df > 0]
+
+Using the ``Series.isin`` method for filtering:
+
+.. ipython:: python
+
+   df2[df2["E"].isin(["test"])]
+
+Setting
+~~~~~~~
+
+Setting a new column automatically aligns the data by the indexes.
+
+.. ipython:: python
+
+   s1 = pd.Series(np.arange(6)+1, index=pd.date_range("20210801", periods=6))
+   s1
+   df["F"] = s1
+
+Setting values by label:
+
+.. ipython:: python
+
+   df.at[dates[0], "A"] = 0
+
+Setting values by position:
+
+.. ipython:: python
+
+   df.iat[0, 1] = 0
+
+Setting by assigning with a Numpy array:
+
+.. ipython:: python
+
+   df["D"] = np.array([6] * len(df))
+
+The result of the prior setting operations.
+
+.. ipython:: python
+
+   df
+
+A ``where`` operation with setting.
+
+.. ipython:: python
+
+   df2 = df.copy()
+   df2[df2 > 0] = -df2
+   df2
+
+
+Missing data
+------------
+
+pandas primarily uses the value ``np.nan`` to represent missing data. It is by default not included in computations.
+
+Reindexing allows you to change/add/delete the index on a specified axis. This returns a copy of the data.
+
+.. ipython:: python
+
+   df1 = df.reindex(index=dates[0:4], columns=list(df.columns) + ["E"])
+   df1
+   df1.loc[dates[0] : dates[1], "E"] = 1
+   df1
+
+Drop any rows that have missing data.
+
+.. ipython:: python
+
+   df1.dropna(how="any")
+
+Drop any columns that exceed certain threshold。
+
+.. ipython:: python
+
+   df1.dropna(thresh=len(df)*0.9, axis=1)
+
+Get the boolean mask where values are ``nan``.
+
+.. ipython:: python
+
+   pd.isna(df1)
+
+Replace NaN in a column with a value.
+
+.. ipython:: python
+
+   df1["E"] = df1.E.replace(np.nan, 6.0)
+   df1
+
+Filling missing data with closest previous valid value with preceding direction
+
+.. ipython:: python
+
+   df1.ffill(axis=0)  # previous row -> current row, fill from above
+   df1.ffill(axis=1)  # previous col -> current col, fill from left
+   df1.bfill(axis=0)  # next row -> current row, fill from below
+   df1.bfill(axis=1)  # next col -> current col, fill from right
+
+
+Drop duplicate values in a column.
+
+.. ipython:: python
+
+   df1.drop_duplicates(subset="E", keep="last")
+
+Drop rows which contains a value.
+
+.. ipython:: python
+
+   df1[((df1 != 2) & (df1 != 3)).all(axis=1)]
+
+Change certain column names.
+
+.. ipython:: python
+
+   df1.rename(columns={"F":"Rank", "E":"Variance"})
+
+
+Operations
+----------
+
+Stats
+~~~~~
+
+Operations in general *exclude* missing data.
+
+Performing a descriptive statistic:
+
+.. ipython:: python
+
+   df.mean()
+
+Same operation on the other axis:
+
+.. ipython:: python
+
+   df.mean(axis=1)
+
+Operating with objects that have different dimensionality and need alignment. In addition, pandas automatically broadcasts along the specified dimension.
+
+.. ipython:: python
+
+   s = pd.Series([1, 3, 5, np.nan, 6, 8], index=dates).shift(2)
+   s
+   df.sub(s, axis="index")
+
+Apply
+~~~~~
+
+Applying functions to the data:
+
+.. ipython:: python
+
+   df.apply(np.cumsum)
+   df.apply(lambda x: x.max() - x.min())
+
+String Methods
+~~~~~~~~~~~~~~
+
+Series is equipped with a set of string processing methods in the ``str`` attribute that make it easy to operate on each element of the array, as in the code snippet below. Note that pattern-matching in ``str`` generally uses `regular expressions <https://docs.python.org/3/library/re.html>`__ by default (and in some cases always uses them).
+
+.. ipython:: python
+
+   s = pd.Series(["A", "B", "C", np.nan, "CABA", "dog", "cat"])
+   s.str.lower()
+
+More `string methods`_ are provided like ``str.title``, ``str.capitalize``, ``str.upper``.
+
+Data types
+~~~~~~~~~~
+
+Several methods to convert data types are available:
+
+.. ipython:: python
+
+   df = pd.DataFrame({
+      'product': ['A', 'B', 'C', 'D'], 
+      'price': ['10', '20', '30', '40'],
+      'sales': ['20', '-', '60', '-']
+   })
+   df
+   df = df.astype({'price': 'int'})
+
+But when we use ``astype`` to convert `sales` to integer, `ValueError` will occur because of invalid literal '-'. Fortunately, ``to_numeric`` solves the issue with parameter ``errors``:
+
+.. ipython:: python
+
+   df['sales'] = pd.to_numeric(df['sales'], errors='coerce')
+   df.dtypes
+
+Merge
+-----
+
+Join
+~~~~
+
+We illustrate a more detailed example in a background of business. Suppose we have three dataframes:
+
+.. ipython:: python
+
+   df1 = pd.DataFrame({
+      "id": np.arange(1, 4),
+      "price": [99, 105, 50]
+   })
+   df1
+   df2 = pd.DataFrame({
+      "id": np.arange(3, 5),
+      "count": [12, 15]
+   })
+   df2
+   df3 = pd.DataFrame({
+      "id": np.arange(1, 7),
+      "price": [99, 105, 50, 60, 30, 40],
+      "count": [10, 20, 12, 15, 100, 50],
+      "date": pd.date_range("20210801", periods=6)
+   })
+   df3
+
+SQL style merges :
+
+.. ipython:: python
+
+   pd.merge(df1, df2, on="id", how="left")
+   pd.merge(df1, df2, on="id", how="right")
+   pd.merge(df1, df2, on="id", how="outer")
+   pd.merge(df1, df2, on="id", how="inner")
+   df1.merge(df2, on="id", how="inner") # alternative syntax
+
+If we are to merge two dataframes with identical column names, directly using ``DataFrame.join`` will produce an `ValueError` said columns overlap but no suffix specified. One approach is to specify suffix for both dataframes with respect to columns that cause the conflict:
+
+.. ipython:: python
+
+   df1.join(df2, lsuffix="_df1", rsuffix="_df2")
+
+Another approach is to set ahead index for both dataframes:
+
+.. ipython:: python
+
+   df1.set_index("id").join(df2.set_index("id"))
+
+Reset index while adding the old index as a new column:
+
+.. ipython:: python
+
+   df1 = df1.set_index("id")
+   df1 = df1.reset_index()
+   df1
+
+Concat
+~~~~~~
+
+pandas provides various facilities for easily combining together Series and DataFrame objects with various kinds of set logic for the indexes and relational algebra functionality in the case of join / merge-type operations.
+
+Split into pieces and concatenate back:
+
+.. ipython:: python
+
+   pieces = [df3[:2], df3[2:4], df3[4:]]
+   pieces
+   pd.concat(pieces)
+
+.. note::
+
+   Adding a column to a ``DataFrame`` is relatively fast. However, adding
+   a row requires a copy, and may be expensive. We recommend passing a
+   pre-built list of records to the ``DataFrame`` constructor instead
+   of building a ``DataFrame`` by iteratively appending records to it.
+
+Extend this example to consolidate former knowledge. Determine whether to supplement products:
+
+.. ipython:: python
+
+   df3["enough"] = np.where(df3["count"] >= 50, "yes", "no")
+
+Add level of price to expensive or cheap:
+
+.. ipython:: python
+
+   df3.loc[(df3["price"] > 50), "level"] = "high"
+   df3.loc[(df3["price"] < 51), "level"] = "low"
+
+Use ``cut`` to categorize data by bins:
+
+.. ipython:: python
+
+   df3['ageGroup'] = pd.cut(df3['price'], bins=[0, 40, 70, 100], 
+                            labels=['low', 'mid', 'high'])
+
+Split date into detailed unit and horizontally append to dataframe:
+
+.. ipython:: python
+
+   df3.date = df3.date.astype(str) # avoid AttributeError
+   subdate = pd.DataFrame((x.split('-') for x in df3.date), index=df3.index, 
+                           columns=['year','month','day'])
+   pd.concat([df3,subdate], axis=1, keys=["df3", "dates"])
+
+.. warning::
+
+   Convert data to string dtype before conducting string manipulation, or `AttributeError` will occur. If we do not convert `df3.date` ahead, an error will raise as: AttributeError: 'Timestamp' object has no attribute 'split'.
+
+
+Grouping
+--------
+
+By "group by" we are referring to a process involving one or more of the
+following steps:
+
+ - **Splitting** the data into groups based on some criteria
+ - **Applying** a function to each group independently
+ - **Combining** the results into a data structure
+
+.. ipython:: python
+
+   df = pd.DataFrame({
+      "A": ["foo", "bar", "foo", "bar", "foo", "bar", "foo", "foo"],
+      "B": ["one", "one", "two", "three", "two", "two", "one", "three"],
+      "C": np.random.randn(8),
+      "D": np.random.randn(8),
+   })
+   df
+
+Grouping and then applying the ``pandas.core.groupby.GroupBy.sum`` function to the resulting groups.
+
+.. ipython:: python
+
+   df.groupby("A").sum(numeric_only=True)
+
+Grouping by multiple columns forms a hierarchical index, and again we can apply the ``sum`` function.
+
+.. ipython:: python
+
+   df.groupby(["A", "B"]).sum(numeric_only=True)
+
+Reshaping
+---------
+
+Stack
+~~~~~
+
+.. ipython:: python
+
+   tuples = list(
+       zip(
+           *[
+               ["bar", "bar", "baz", "baz", "foo", "foo", "qux", "qux"],
+               ["one", "two", "one", "two", "one", "two", "one", "two"],
+           ]
+       )
+   )
+   tuples
+   index = pd.MultiIndex.from_tuples(tuples, names=["first", "second"])
+   index
+   df = pd.DataFrame(np.random.randn(8, 2), index=index, columns=["A", "B"])
+   df
+   df2 = df[:4]
+   df2
+
+The ``DataFrame.stack`` method `compresses` a level in the DataFrame's columns.
+
+.. ipython:: python
+
+   stacked = df2.stack(future_stack=True)
+   stacked
+
+With a `stacked` DataFrame or Series (having a ``MultiIndex`` as the ``index``), the inverse operation of ``DataFrame.stack`` is ``DataFrame.unstack``, which by default unstacks the **last level**:
+
+.. ipython:: python
+
+   stacked.unstack() # unstack on the last level 2
+   stacked.unstack(1)
+   stacked.unstack(0)
+
+Pivot tables
+~~~~~~~~~~~~
+
+.. ipython:: python
+
+   df = pd.DataFrame(
+       {
+           "A": ["one", "one", "two", "three"] * 3,
+           "B": ["A", "B", "C"] * 4,
+           "C": ["foo", "foo", "foo", "bar", "bar", "bar"] * 2,
+           "D": np.random.randn(12),
+           "E": np.random.randn(12),
+       }
+   )
+   df
+
+We can produce pivot tables from this data very easily:
+
+.. ipython:: python
+
+   pd.pivot_table(df, values="D", index=["A", "B"], columns=["C"])
+
+
+Time series
+-----------
+
+pandas has simple, powerful, and efficient functionality for performing resampling operations during frequency conversion (e.g., converting secondly data into 5-minutely data). This is extremely common in, but not limited to, financial applications.
+
+.. ipython:: python
+
+   rng = pd.date_range("1/1/2012", periods=100, freq="s")
+   ts = pd.Series(np.random.randint(0, 500, len(rng)), index=rng)
+   ts
+   ts.resample("5min").sum()
+
+Time zone representation:
+
+.. ipython:: python
+
+   rng = pd.date_range("3/6/2012 00:00", periods=5, freq="D")
+   ts = pd.Series(np.random.randn(len(rng)), rng)
+   ts
+   ts_utc = ts.tz_localize("UTC")
+   ts_utc
+
+Converting to another time zone:
+
+.. ipython:: python
+
+   ts_utc.tz_convert("US/Eastern")
+
+Converting between time span representations:
+
+.. ipython:: python
+
+   rng = pd.date_range("1/1/2012", periods=5, freq="ME")
+   ts = pd.Series(np.random.randn(len(rng)), index=rng)
+   ts
+   ps = ts.to_period()
+   ps
+   ps.to_timestamp()
+
+Converting between period and timestamp enables some convenient arithmetic functions to be used. In the following example, we convert a quarterly frequency with year ending in November to 9am of the end of the month following the quarter end:
+
+.. ipython:: python
+
+   prng = pd.period_range("1990Q1", "2000Q4", freq="Q-NOV")
+   ts = pd.Series(np.random.randn(len(prng)), prng)
+   ts.index = (prng.asfreq("M", "e") + 1).asfreq("h", "s") + 9
+   ts.head()
+
+Categoricals
+------------
+
+pandas can include categorical data in a ``DataFrame``.
+
+.. ipython:: python
+
+    df = pd.DataFrame(
+        {
+            "id": [1, 2, 3, 4, 5, 6],
+            "raw_grade": ["a", "b", "b", "a", "a", "e"]
+         }
+    )
+
+Convert the raw grades to a categorical data type.
+
+.. ipython:: python
+
+    df["grade"] = df["raw_grade"].astype("category")
+    df["grade"]
+
+Rename the categories to more meaningful names (assigning to ``Series.cat.rename_categories`` is in place!).
+
+.. ipython:: python
+
+    df["grade"] = df["grade"].cat.rename_categories(["very good", "good", "very bad"])
+    df["grade"]
+
+Reorder the categories and simultaneously add the missing categories (methods under ``Series.cat`` return a new ``Series`` by default).
+
+.. ipython:: python
+
+    df["grade"] = df["grade"].cat.set_categories(
+        ["very bad", "bad", "medium", "good", "very good"]
+    )
+    df["grade"]
+
+Sorting is per order in the categories, not lexical order.
+
+.. ipython:: python
+
+    df.sort_values(by="grade")
+
+Grouping by a categorical column also shows empty categories.
+
+.. ipython:: python
+
+    df.groupby("grade", observed=False).size()
+
+
+Plotting
+--------
+
+We use the standard convention for referencing the matplotlib API:
+
+.. ipython:: python
+
+   import matplotlib.pyplot as plt
+
+   plt.close("all")
+
+The ``plt.close`` method is used to `close <https://matplotlib.org/3.1.1/api/_as_gen/matplotlib.pyplot.close.html>`__ a figure window.
+
+.. ipython:: python
+
+   ts = pd.Series(np.random.randn(1000), index=pd.date_range("1/1/2000", periods=1000))
+   ts = ts.cumsum()
+   ts.plot();
+
+.. image:: ../_static/img/pd_series.png
+   :align: center
+
+On a DataFrame, the ``DataFrame.plot`` method is a convenience to plot all of the columns with labels:
+
+.. ipython:: python
+
+   df = pd.DataFrame(
+       np.random.randn(1000, 4), index=ts.index, columns=["A", "B", "C", "D"]
+   )
+
+   df = df.cumsum()
+
+   plt.figure();
+   df.plot();
+   plt.legend(loc='best');
+
+.. image:: ../_static/img/pd_df.png
+   :align: center
+
+
+IO Management
+-------------------------
+
+CSV
+~~~
+
+`Writing <https://pandas.pydata.org/docs/user_guide/io.html#io-store-in-csv>`__ to a csv file.
+
+.. ipython:: python
+
+   df.to_csv("foo.csv")
+
+`Reading <https://pandas.pydata.org/docs/user_guide/io.html#io-read-csv-table>`__ from a csv file.
+
+.. ipython:: python
+
+   pd.read_csv("foo.csv")
+
+.. ipython:: python
+   :suppress:
+
+   import os
+
+   os.remove("foo.csv")
+
+
+Excel
+~~~~~
+
+Reading and writing to `MS Excel <https://pandas.pydata.org/docs/user_guide/io.html#io-excel>`__.
+
+Writing to an excel file.
+
+.. ipython:: python
+
+   df.to_excel("foo.xlsx", sheet_name="Sheet1")
+
+Reading from an excel file.
+
+.. ipython:: python
+
+   pd.read_excel("foo.xlsx", "Sheet1", index_col=None, na_values=["NA"])
+
+.. ipython:: python
+   :suppress:
+
+   os.remove("foo.xlsx")
+
+Composition
+~~~~~~~~~~~
+
+To compose one dataframe from multiple files, use ``glob`` library to get paths of files with random order and concatenate vertically and horizontally.
+
+.. code-block:: python
+
+   from glob import glob
+   files = sorted(glob("data/prefix_*.csv"))
+   pd.concat((pd.read_csv(file) for file in files), ignore_index=True)
+   pd.concat((pd.read_csv(file) for file in files), axis=1)
+
+
+Miscellaneous
+-------------------------
+
+Trim white spaces for object-dtype element.
+
+.. code-block:: python
+
+   for i in df:                               # traverse each column
+      if pd.api.types.is_object_dtype(df[i]): # if dtype is object
+         df[i] = df[i].str.strip()          # remove white space
+
+Copy from applications like Excel and paste through pandas as a ``DataFrame``.
+
+.. code-block:: python
+
+   pd.read_clipboard()
+
+Data wrangling with pandas can be referenced through an official `cheatsheet`_.
+
+.. _pandas: https://pandas.pydata.org/docs/index.html
+.. _string methods: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.str.capitalize.html
+.. _cheatsheet: http://pandas.pydata.org/Pandas_Cheat_Sheet.pdf

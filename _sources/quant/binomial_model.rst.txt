@@ -1,0 +1,140 @@
+.. _binomial_model:
+
+=========================
+Binomial Model Guide
+=========================
+
+This is an elegant-design introduction to binomial model, geared mainly for new users.
+
+Assumptions
+-------------------------
+
+Binomial model is for discrete time finance, and is have key assumptions:
+
+- an asset value changes only at discrete time intervals
+- fractional trading is allowed
+- an asset's worth can change to one of only two possible new values at each time step.
+
+In option pricing theory, key assumptions are
+
+- short selling allowed
+- no arbitrage opportunities
+
+and relaxable assumptions are
+
+- frictionless markets - no transaction costs, limits to trading or taxes
+- perfect liquidity
+- known volatility and interest rates
+- no dividends on the underlying
+
+Delta-hedged portfolio
+-------------------------
+
+Growing or decreasing of the option price is irrelevant, but price range is related to volatility. The larger the volatility, the greater the range. Later we will see that the drift does not exist when pricing derivatives in the binomial model.
+
+To solve the option value, set up a portfolio :math:`\Pi` consisting of one long position in an option and short :math:`\Delta` shares
+
+.. math::
+
+   \Pi = V - \Delta S
+
+where :math:`V` is value of the option, :math:`\Delta` is the number of shares, and :math:`S` is the stock price. By balancing :math:`\Pi^+` and :math:`\Pi^-` we could solve the value of :math:`\Delta` where
+
+.. math::
+
+   \Pi^+ = V^+ - \Delta S^+\\
+   \Pi^- = V^- - \Delta S^-
+
+or calculated directly by
+
+.. math::
+
+   \Delta = \frac{V^+ - V^-}{S^+ - S^-}
+
+in discrete time. In continuous time, we write :math:`\Delta = \frac{\partial V}{\partial S}`. This choice of :math:`\Delta` makes :math:`\Pi` risk-free, so no-arbitrage suggests that the return on :math:`\Pi` equal the risk-free rate, i.e.
+
+.. math::
+
+   e^{rT} \Pi = \Pi^+ = \Pi^-
+
+which derives
+
+.. math::
+
+   V = e^{-rT} \left(qV^+ + (1-q)V^-\right)
+
+where we define
+
+.. math::
+
+   q = \frac{e^{rT}S - S^-}{S^+ - S^-}
+
+with :math:`0 < q < 1`. In discrete time finance, this becomes
+
+.. math::
+
+   V = (1 - rT) \left(qV^+ + (1-q)V^-\right) = (1 - rT) \mathbb{E}^{\mathbb{Q}}[\text{payoff}]
+
+where we define
+
+.. math::
+
+   q = \frac{(1 + rT)S - S^-}{S^+ - S^-}
+
+Pricing an option using the risk neutral probability, :math:`q`, will make neither a profit nor a loss, while pricing an option using the real probability, :math:`p`, will probably make you a profit or loss.
+
+Self-financing portfolio
+-------------------------
+
+Another aspect of binomial model is replication the option using only cash (or bonds) and the asset, by rearraging the equation from
+
+.. math::
+
+   \Pi = V - \Delta S
+
+to
+
+.. math::
+
+   V = \Pi + \Delta S
+
+Consider the prerequisites:
+
+- :math:`s_u` to be the price going up and :math:`s_d` to be the price going down
+- the option :math:`X` pays off :math:`x_u` if the asset price is :math:`s_u` and :math:`x_d` if :math:`s_d`
+- the dynamics of the risk-free asset :math:`B_t` satisfies :math:`dB_t = rB_t dt` where :math:`B_0 = 1`, or :math:`B_t = e^{rt}B_0` in continuous time.
+
+Now consider a portfolio of :math:`\psi` bonds with one-year duration and :math:`\phi` assets at :math:`t = 0` with initial value of
+
+.. math::
+
+   V = \Pi(\psi, \phi) = \phi s + \psi
+
+After a timestamp, we replicate the option by insisting
+
+.. math::
+
+   x_u = V^+ = \Pi^+ = \phi s_u + \psi e^r\\
+   x_d = V^- = \Pi^- = \phi s_d + \psi e^r
+
+which derives a hedging strategy with
+
+.. math::
+
+   \phi = \frac{x_u - x_d}{s_u - s_d}, ~ \psi = e^{-r} \frac{x_d s_u - x_u s_d}{s_u - s_d}
+
+Define
+
+.. math::
+
+   q = \frac{e^{r}s - s_d}{s_u - s_d},
+
+we have
+
+.. math::
+
+   V = e^{-r} (qx_u + (1 - q)x_d) = \mathbb{E}^{\mathbb{Q}}\left[e^{-r(T - t)}X\right]
+
+where :math:`0 < q < 1` and :math:`(T - t)` to be time to maturity. The set of probabilities :math:`\mathbb{Q} = \{q, (1-q)\}` is called a risk-neutral measure. Risk neutral/fair value under :math:`\mathbb{Q}` of a call is less than the expected value of the call under :math:`\mathbb{P}`.
+
+Currently, three methods of option pricing are introduced: delta-hedged portfolio, self-financing portfolio or replication, and one using risk-neutral probabilities.

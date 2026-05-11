@@ -1,0 +1,560 @@
+.. _java_selected:
+
+=========================
+Java Selected
+=========================
+
+Java selected topics from Josh Hug's lectures.
+
+Basics
+=========================
+
+Use ``javac`` for compilation and ``.class`` file generation and ``java`` for running ``.class`` file in command line.
+
+.. code-block:: console
+
+    $ javac hello.java
+    $ ls
+    hello.class hello.java
+    $ java hello.class
+    "Hello World :)"
+
+Testing
+-------------------------
+    
+IDEA debugger provides Java Visualizer offering stepwise environment diagram changes.
+
+The ``org.junit`` provides numerous helpful methods for simplifying writing tests. For example, :java:`org.junit.Assert.assertEquals(expected, actual)` tests equality; if they are not equal, the program terminates with a verbose error message. More assertion methods are on `JUnit 5 <JUnit>`_ documentation.
+
+Test annotation
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To use a test annotation, we need to
+
+- precede each test method with :java:`@org.junit.Test`
+- change each test method to be non-static
+- remove ``main`` method from the test class
+
+JUnit automatically run all tests with a test annotation using the Run command button.
+
+.. code-block:: java
+
+    public class Test {
+        @org.junit.Test
+        public void testMethod() {
+            // prepare test cases
+
+            org.junit.Assert.assertArrayEquals(expected, actual);
+        }
+    }
+
+Import JUnit
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To shorten namespace, we write two import statement:
+
+.. code-block:: java
+
+    import org.junit.Test;
+    import static org.junit.Assert.*;
+
+    public class Test {
+        @Test
+        public void testMethod() {
+            // prepare test cases
+
+            assertArrayEquals(expected, actual);
+        }
+    }
+
+The first statement allows us to replace :java:`@org.junit.Test` with :java:`@Test`, while the second statement allows us to directly use method name, removing :java:`org.junit.Assert.` namespace.
+
+Test-Driven Development (TDD)
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+TDD is a development process in which we write tests for code before writing the code itself. The steps are as follows:
+
+- Identify a new feature,
+- Write a unit test for that feature,
+- Run the test. It should fail,
+- Write code that passes the test,
+- Refactor code to make it faster and cleaner.
+
+Reference
+-------------------------
+
+Java has 8 **primitive types**: byte, short, **int**, long, float, **double**, boolean, and char. If a variable is declared but not initialized, Java compiler prevents you from using a variable until initialization. For primitive types, Java conduct assignment by copying the bits from onr variable to another.
+
+.. code-block:: java
+
+    int x = 0; // x: 0
+    int y = x; // x: 0 | y: 0
+    x = 1;     // x: 1 | y: 0
+
+Types that are not primitive are **reference types**. When we declare a variable of a reference type, Java allocate a pointer with a size of 64 bits, storing ``Null`` or the address of a specific instance of the class returned by ``new`` keyword.
+
+.. code-block:: java
+
+    Person p = new Person(18); // p.age: 18
+    Person q = p;              // p.age: 18 | q.age: 18
+    q.age = 20;                // p.age: 20 | q.age: 20
+
+.. tip::
+
+    In Java, the golden rule of equals (GRoE) is that Java always passes parameters by simply copying the bits to the new scope, or pass by value.
+
+Uses ``.equals`` for logical comparison; instead, ``==`` compared the memory address of two objects.
+
+Nested class
+-------------------------
+
+Nested class si useful when a class is obviously subordinate to another class.
+
+- if other class should never access the nested class, make the nested class **private**, and
+- if the nested class do not use any instance members of the outer class, make the nested class **static**.
+
+.. code-block:: java
+    :emphasize-lines: 2
+
+    public class WrapperList {
+        private static class ListNode {
+            public int value;
+            public ListNode next;
+            public ListNode(int v, ListNode n) {
+                value = v;
+                next = n;
+            }
+        }
+
+        private ListNode head;
+
+        public WrapperList(int v) {
+            head = new ListNode(v, null);
+        }
+    }
+
+Lists
+-------------------------
+
+When designing and implementing doubly linked lists, use both front and back sentinel nodes to generalize methods that add to or remove the head or tail node, i.e. eliminate corner case analysis.
+
+To achieve this, we could use two sentinel nodes, head and tail dummy nodes, or use just the head dummy node and create a circular sentinel by assigning the ``next`` pointer of the last node pointing to the head node.
+
+When designing and implementing generic array list, Java oes not allow initialize lists with generic types. Instead, we use ``Object`` class and downcasting to achieve list construction.
+
+.. code-block:: java
+
+    public class List<T> {
+        private T[] array;
+        private int size;
+
+        public List() {
+            array = (T[]) new Object[10];
+            size = 0;
+        }
+
+        private void resize(int capacity) {
+            T[] newArray = (T[]) new Object[capacity];
+            System.arraycopy(array, 0, newArray, 0, size);
+            array = newArray;
+        }
+
+        // more instance methods
+    }
+
+When the size is at the maximum capacity, we first resize the array and then add the new item. A new size calculated by multiplying a factor to the original size is more time efficient than adding a fixed size.
+
+.. code-block:: java
+
+    public void addLast(T t) {
+        if (size == array.length) {
+            resize(size * 2);
+        }
+        array[size] = t;
+        size++;
+    }
+
+When deleting the last item, assigning the deleted item to ``null`` could save memory. This removes the reference pointing to the deleted item and allows the garbage collector to recycle the memory.
+
+.. code-block:: java
+
+    public T removeLast() {
+        T t = getLast();
+        size--;
+        array[size] = null;
+
+        return t;
+    }
+
+Object
+-------------------------
+
+An interface defines **what can do**, and an abstract class or a superclass defines **how to do**.
+
+Remember to always annotate when overriding methods, helping compiler to better check compilation errors.
+
+.. code-block:: java
+
+    @Override
+    public boolean equals(Object other) {
+        if (this == other) { return true; }
+        if (o instanceof Dog d) {
+            return this.size == d.size;
+        }
+        return false;
+    }
+
+The ``instanceof`` keyword checks if the dynamic type of parameter ``other`` is ``Dog`` or its subtypes and casts ``other`` into a variable of static type ``Dog`` called ``d``. It works even if ``other`` is ``null``;
+
+Higher-order function
+-------------------------
+
+Suppose a function squares the input parameter twice, and we achieve this in Python using higher-order function:
+
+.. code-block:: python
+
+    def square(x):
+        return x * x
+    
+    def doTwice(f, x):
+        return f(f(x))
+    
+    print(doTwice(square, 10))
+
+Java does not allow a reference refering to a function and pass it as a parameter. Instead, we could use inheritance to accomplish the same goal:
+
+.. code-block:: java
+
+    public interface IntFunction {
+        int apply(int x);
+    }
+
+    public class Square implements IntFunction {
+        @Override
+        public int apply(int x) {
+            return x * x;
+        }
+    }
+
+    public class Demo {
+        public static int doTwice(IntFunction f, int x) {
+            return f.apply(f.apply(x));
+        }
+
+        public static void main(String[] args) {
+            System.out.println(doTwice(new Square(), 0));
+        }
+    }
+
+Comparable & Comparator
+-------------------------
+
+The **Comparable** interface is suitable for defining the natural ordering. 
+
+.. code-block:: java
+
+    public class Team implements Comparable<Team> {
+        private int ranking;
+
+        public Team(int ranking) {
+            this.ranking = ranking;
+        }
+
+        public int getRanking() {
+            return this.ranking;
+        }
+
+        @Override
+        public int compareTo(Team o) {
+            return Integer.compare(this.ranking, o.getRanking());
+        }
+    }
+
+Instead, the **Comparator** can be defined without modifying the original class, and it is possible to define multiple different comparison methods.
+
+.. code-block:: java
+
+    import java.util.Comparator;
+
+    public class TeamRankComparator implements Comparator<Team> {
+        @Override
+        public int compare(Team t1, Team t2) {
+            return Integer.compare(t1.getRanking(), t2.getRanking());
+        }
+    }
+
+After defining methods for comparison, we could sort containers of our object.
+
+.. code-block:: java
+
+    import java.util.List;
+    import java.util.ArrayList;
+    import java.util.Collections;
+
+    public class TeamDemo {
+        public static void main(String[] args) {
+            List<Team> team = new ArrayList<>();
+            // adding elements to the list
+            Collections.sort(team);
+        }
+    }
+
+If we could access the source code of the class, we could define the Comparator as a nested class by convention.
+
+.. code-block:: java
+
+    // Team.java
+    import java.util.Comparator;
+
+    public class Team {
+        private int ranking;
+
+        public Team(int ranking) {
+            this.ranking = ranking;
+        }
+
+        private static class TeamRankComparator implements Comparator<Team> {
+            @Override
+            public int compare(Team t1, Team t2) {
+                return Integer.compare(t1.ranking, t2.ranking);
+            }
+        }
+
+        public static Comparator<Team> getTeamRankComparator() {
+            return new TeamRankComparator();
+        }
+    }
+
+    // TeamDemo.java
+    import java.util.Comparator;
+
+    public class TeamDemo {
+        public static void main(String[] args) {
+            Comparator<Team> trc = Team.getTeamRankComparator();
+            Team t1 = new Team(1);
+            Team t2 = new Team(2);
+            if (trc.compare(t1, t2) < 0) {
+                System.out.println("Team 1 wins.");
+            } else {
+                System.out.println("Team 2 wins.");
+            }
+        }
+    }
+
+Iteration
+-------------------------
+
+To iterate a collections, we could use the enhanced for loop:
+
+.. code-block:: java
+
+    Set<Integer> s = new HashSet<>();
+    for (int x : s) {
+        System.out.println(x);
+    }
+
+An alternative approach is using an iterator instance:
+
+.. code-block:: java
+
+    Set<Integer> s = new HashSet<>();
+    Iterator<Integer> iter = s.iterator();
+    while (iter.hasNext()) {
+        System.out.println(iter.next());
+    }
+
+To allow iterator approach to compile, the compiler checks whether the Set interface have an :java:`iterator()` method and whether the iterator interface has both :java:`hasNext()` and :java:`next()` methods.
+
+Implementation of a simple array with :java:`iterator()`, :java:`hasNext()`, and :java:`next()` methods:
+
+.. code-block:: java
+
+    import java.util.Iterator;
+
+    public class SimpleArray<T> {
+        private T[] array;
+        private int size;
+
+        public SimpleArray() {
+            array = (T[]) new Object[10];
+            size = 0;
+        }
+
+        public void add(T item) {
+            if (size == array.length)
+                resize(size * 2);
+
+            array[size++] = item;
+        }
+
+        public void resize() {}
+
+        public Iterator<T> iterator() {
+            return new SimpleArrayIterator();
+        }
+
+        private class SimpleArrayIterator implements Iterator<T> {
+            private int index;
+
+            public SimpleArrayIterator() {
+                index = 0;
+            }
+
+            public boolean hasNext() {
+                return index < size;
+            }
+
+            public T next() {
+                return array[index++];
+            }
+        }
+
+        public static void main(String[] args) {
+            SimpleArray<Integer> sa = new SimpleArray<>();
+            sa.add(0);
+            sa.add(1);
+            sa.add(2);
+            sa.add(3);
+            Iterator<Integer> iter = sa.iterator();
+            while (iter.hasNext()) {
+                System.out.println(iter.next());
+            }
+        }
+    }
+
+The enhanced for loop is just a shorthand for an iterator. In the implementation above, Java does not know that we actually write our own ``SimpleArrayIterator`` as a private class. In terms of the inheritance relationship, we have to explicitly state the implemented interface for the enhanced for loop to compile. To do this, change the class declaration to:
+
+.. code-block:: java
+
+    public class SimpleArray<T> implements Iterable<T> {...}
+
+By declaring that we implement ``Iterable<T>``, we tell the compiler that we write our :java:`iterator()` in the class.
+
+.. code-block:: java
+
+    public interface Iterable<T> {
+        Iterator<T> iterator();
+    }
+
+String
+-------------------------
+
+String concatenation using ``+`` operator has a quadratic complexity, while using a ``StringBuilder`` only has a linear complexity.
+
+.. code-block:: java
+
+    @Override
+    public String toString() {
+        StringBuilder builder = new StringBuilder();
+        for (T t : array) {
+            builder.append(t.toString());
+        }
+
+        return builder.toString();
+    }
+
+To optimize the ``toString`` method of a collection, use ``String.join`` method which is similar to Python:
+
+.. code-block:: java
+
+    @Override
+    public String toString() {
+        List<String> items = new ArrayList<>();
+        for (T t : array) {
+            items.add(t.toString());
+        }
+        return "[" + String.join(", ", items) + "]";
+    }
+
+Create a new collection from the string representation:
+
+.. code-block:: java
+
+    public static <T> SimpleArray<T> of(T... items) {
+        SimpleArray<T> array = new SimpleArray<>();
+        for (T t : items) {
+            array.add(t);
+        }
+
+        return array;
+    }
+
+Complexity
+-------------------------
+
+Formal definition of Big Theta:
+
+.. math::
+
+    R(N) \in \Theta(f(N)) \Rightarrow \exists ~ k_1, k_2 > 0 \text{ s.t. } k_1 \cdot f(N) \leq R(N) \leq k_2 \cdot f(N) ~ \forall ~ N > N_0
+
+Formal definition of Big O:
+
+.. math::
+
+    R(N) \in O(f(N)) \Rightarrow \exists ~ k_2 > 0 \text{ s.t. } R(N) \leq k_2 \cdot f(N) ~ \forall ~ N > N_0
+
+
+Data structure
+=========================
+
+Disjoint set
+-------------------------
+
+Disjoint set is used to maintain and check connectivity, with ``connect`` and ``isConnected`` methods.
+
+.. code-block:: java
+
+    public interface IntegerDisjointSet {
+        // connects two integers p and q
+        void connect(int p, int q);
+        // checks whether two integers are connected
+        boolean isConnected(int p, int q);
+    }
+
+By intuition, disjoint set could use data structure :java:`List<Set<Integer>>`, but this has :math:`\Theta(N)` time complexity for the constructor and both methods. Or, we could use a list of integer with index as the value of our nodes, and all values in the same set is identical. This data structure improves the ``isConnected`` method to :math:`\Theta(1)` time complexity.
+
+We could further improve the complexity using the identical integer list data structure by assigning every node a parent node, with root node a value of -1.
+
+.. code-block:: java
+
+    public class UnionDisjointSet implements IntegerDisjointSet {
+        private int[] parent;
+
+        public UnionDisjointSet(int n) {
+            parent = new int[n];
+            for (int i = 0; i < n; i++) {
+                parent[i] = -1;
+            }
+        }
+
+        private int find(int p) {
+            int r = p;
+            while (parent[r] >= 0) {
+                r = parent[r];
+            }
+
+            return r;
+        }
+
+        public void connect(int p, int q) {
+            int i = find(p);
+            int j = find(q);
+            parent[i] = j;
+        }
+
+        public boolean isConnected(int p, int q) {
+            return parent[p] == parent[q];
+        }
+    }
+
+
+This resulting a tree-like structure, incurring the problem that the height of the tree is high with large data. The time complexity is :math:`\Theta(N)` for the constructor and :math:`O(N)` for both methods. If we could control the shape of the tree to make it balanced, the problem will be solved.
+
+The structure is modified into a weighted union set by tracking the tree size and always linking root of the smaller tree to root of the larger tree, i.e. root of the smaller tree changes to root of the larger tree. In this approach, the worst case tree height is :math:`\Theta(\log N)`. Hence, we improve the time complexity for both ``connect`` and ``isConnected`` methods to :math:`O(\log N)`.
+
+Now considering the worse case that when connecting two trees with the same weight, the height will still grow relatively fast. We could conduct path compression  by updating all nodes visited during path finding in ``isConnected`` to the root value. As number of operations :math:`M` grows, the tree tends to get shorter, even shrink to 1 with sufficient operations.
+
+
+
+.. _JUnit: https://junit.org/junit5/docs/current/user-guide/

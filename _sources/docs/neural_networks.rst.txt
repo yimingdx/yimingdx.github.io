@@ -1,0 +1,682 @@
+.. _neural_networks_guide:
+
+=========================
+Neural Networks Guide
+=========================
+
+This is an elegant-design introduction to Standard Deep Neural Networks (DNN), geared mainly for new users. A neural network can be illustrated as a computation graph with forward passes and backward propagation of biases. The performance of deep learning depends on several factors: data availability, GPU and computational power, algorithm like activation functions and optimizers, ML iterative cycle, size of DNN, etc.
+
+Vectorization is a fundamental tool to accelerate computation, and modern ML frameworks provide libraries and functions of DNN.
+
+
+Setting up
+-------------------------
+
+Applied machine learning is a highly iterative process with recurrent components: idea, code implementation, and experiment. In modern era, the dataset is usually splitted into a ratio of 98/1/1 with training set being the largest component. There are four components that usually exist in a ML project:
+
+- training set: build the model
+- training-dev set
+- dev set (or hold-out cross validation set): optimize hyperparameters
+- test set: evaluate performance
+
+Make sure the data in the dev and test set are from the same distribution, which reflects target deployment. If data is insufficient, move some of data in the dev and test set to training set. Though the distributions of training set and dev/test set are slightly different, the dev/test set data distribution still target to application.
+
+
+Model performance
+-------------------------
+
+Several metric is introduced:
+
+- A model key performance indicator (KPI) is often chosen as a single-number evaluation metric before starting the project.
+- A satisfying metric is a metric that cannot exceed.
+- A optimizing metric is a metric you want to maximize or minimize
+
+Make sure to **build your first model quickly, then iterate.**
+
+As your products iterate versions, re-consider if the KPI metric still aims at the target accurately. If the model does well on metrics but the dev and test set does poorly on application, change metrics and/or dev and test set.
+
+Bayes optimal optimal error is the theoretical lowest error using a mapping function for which human-level performance can be a proxy. If the model cannot near human-level performance, you can
+
+- get more labeled data from human
+- manual error analysis and investigation
+- improve bias-variance analysis
+
+Four errors could happen
+
+- Avoidable bias, or just bias, is the difference between the training error and the human-level performance. You cannot do better than Bayes error unless the model is overfitting.
+- Variance is the difference between the training error and the dev error, or the difference between the training-dev error and the training error if training-dev set exists.
+- Data mismatch happens when the difference between training-dev error and dev error is big. There are not systematic solutions to this but you could try manual error analysis and artificial data synthesis about which overfitting is a concern.
+- Degree of overfitting to dev set is the difference between test error and dev error.
+
+If a model is underfitting, high bias occurs. Try
+
+- to enlarge NN
+- to run longer
+- NN architecture search
+- Hyperparameter search
+- better optimization algorithm
+
+If a model is overfitting, high variance occurs. Try
+
+- get more data
+- regularization
+- NN architecture search
+
+Deep learning algorithms are robust to random errors in the training set but fragile to systematic errors like mislabeled data. So, error analysis and label correction should be done to determine the next step. Remember to conduct same strategy on dev and test set to ensure distribution consistency.
+
+
+Notations
+-------------------------
+
+- :math:`m` : number of examples
+- :math:`n_{x}` : input size (or single example size)
+- :math:`n_{y}` : output size (or number of classes)
+- :math:`L` : number of layers
+- :math:`X \in \mathbb{R}^{n_{x} \times m}` : input matrix
+- :math:`Y \in \mathbb{R}^{n_{y} \times m}` : label matrix
+- :math:`x^{[l](i)}` : the :math:`i^{th}` training example of the :math:`l^{th}` layer
+- :math:`x_{h}` : the :math:`h^{th}` hidden units
+- :math:`W^{[l]}` : weight matrix for :math:`l^{th}` layer
+- :math:`b^{[l]}` : bias vector for :math:`l^{th}` layer
+- :math:`\hat{y}` : predicted output vector (or :math:`a^{[L]}`)
+
+
+Logistic regression
+-------------------------
+
+Definition
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given parameters :math:`x \in \mathbb{R}^{n_x}`, :math:`w \in \mathbb{R}^{n_x}`, and :math:`b \in \mathbb{R}`, we want :math:`\hat{y}` to be, with sigmoid function as the activation function to illustrate binary classification in this guide, 
+
+.. math::
+   
+   \hat{y} = P(y = 1 | x) = \sigma(z) = \sigma(w^{T}x + b)
+
+where :math:`0 \leq \hat{y} \leq 1`.
+
+For the definition of the chosen activation function, refer to :ref:`activation functions<activation_functions>`
+
+Cost function
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given :math:`\left\{\left(x^{1}, y^{1}\right),\left(x^{2}, y^{2}\right), \ldots\left(x^{m}, y^{m}\right)\right\}`, we want :math:`\hat{y}^{(i)} \approx y^{(i)}`. To calculate the cost function, we first need to choose a loss function which is a convex function
+
+.. math::
+
+   \mathcal{L}(\hat{y}, y) = - \left(y \log \hat{y} + (1 - y) \log (1 - \hat{y}) \right)
+
+Commonly, if replacing :math:`\hat{y}` with :math:`a`, we have
+
+.. math::
+
+   \mathcal{L}(a, y) = - \left(y \log a + (1 - y) \log (1 - a) \right)
+
+The cost function (or log likelihood) is defined as
+
+.. math::
+
+   \mathcal{J}(w, b)=\frac{1}{m} \sum_{i=1}^{m} \mathcal{L}\left(\hat{y}^{(i)}, y^{(i)}\right)=\frac{1}{m} \sum \mathcal{L}\left(a, y\right)
+
+Derivatives
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+To calculate derivatives with respect to a certain variable in the cost function, use one step backward propagation on a computational graph with chain rule, calculating from right to left. Recall that :math:`\hat{y} = a = \sigma(z)` where :math:`z = w^{T}x + b)`, the solution to the derivative is
+
+.. math::
+
+   dz = \frac{dL}{dz} = \frac{dL}{da} \frac{da}{dz} = \frac{a-y}{a(1-a)} \times a(1-a) = a - y = \hat{y} - y
+
+
+Softmax regression
+-------------------------
+
+Softmax regression is a generalized version of logistic regression used for multiple output classes. Suppose we have :math:`C` number of classes, the Softmax activation equation is
+
+.. math::
+
+   \begin{align*}
+      t & = e^{z^{[l]}}\\
+      a^{[l]}
+      & = \frac{e^{z^{[l]}}}{\sum^{C}_{i = 1} t_i}\\
+      & = \frac{t}{\sum^{C}_{i = 1} t_i}\\
+   \end{align*}
+
+
+Gradient descent
+-------------------------
+
+Definition
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Gradient descent optimization algorithm finds :math:`w, b` that minimize :math:`\mathcal{J}(w, b)`, i.e. to find the minima in the graph of convex loss function.
+
+.. math::
+
+   w = w - \alpha \frac{\partial \mathcal{J}}{\partial w}, \quad
+   b = b - \alpha \frac{\partial \mathcal{J}}{\partial b}
+
+where :math:`\alpha` is the learning rate, and
+
+.. math::
+
+   \frac{\partial J}{\partial w} = \frac{1}{m}X(A-Y)^T, \quad
+   \frac{\partial J}{\partial b} = \frac{1}{m} \sum_{i=1}^m \left(a^{(i)}-y^{(i)}\right)
+
+For simplicity, we denote :math:`dx` as the (partial) derivative of a variable, e.g. :math:`dw = \frac{\partial J}{\partial w}`.
+
+In a deep neural network, the activation and gradients will explode if :math:`W > I` where :math:`I` is identity matrix; the gradients will vanish if :math:`W < I`. To solve this, refer to :ref:`random initialization<random_initialization>`.
+
+Gradient checking
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Recall the definition of a derivative (or gradient) as
+
+.. math::
+
+   \frac{\partial J}{\partial \theta} = \lim_{\varepsilon \to 0} \frac{J(\theta + \varepsilon) - J(\theta - \varepsilon)}{2 \varepsilon}
+
+Gradient checking tells you if your implementation of backpropagation is correct. We prefer to run gradient checking at random initialization and train the network for several iteration, and bugs may be detected from abnormal growth of weight and bias matrix.
+
+- use it only for debugging purpose.
+- use backward propagation regularization version if :math:`L_2` or :math:`L_1` regularization is applied.
+- gradient checking doesn't work with dropout regularization because the cost function is not consistent.
+- if algorithm fails grad check, look at components to try to identify bug.
+
+We implement by
+
+- concatenate all flattened weight and bias matrices into a vector :math:`\theta`
+- concatenate all flattened weight and bias derivative matrices into a vector :math:`d\theta`
+- calculate approximate gradient :math:`d\theta` by
+
+.. math::
+
+   d \theta_{a p p r o x}^{[i]}=\frac{J\left(\theta_{1}, \theta_{2}, \ldots, \theta_{i}+\varepsilon, \ldots\right)-J\left(\theta_{1}, \theta_{2}, \ldots, \theta_{i}-\varepsilon, \ldots\right)}{2 \varepsilon} \approx d \theta^{[i]}=\frac{\partial J}{\partial \theta_{i}}
+
+- calculate distance using normalized Euclidean distance as
+
+.. math::
+
+   \frac{\left\|d \theta_{a p p r o x}^{[i]}-d \theta\right\|_{2}}{\left\|d \theta_{a p p r o x}^{[i]}\right\|_{2}+\|d \theta\|_{2}}
+
+Now, we interpret results as
+
+.. math::
+
+   \text{distance} \approx
+   \begin{cases}
+		1e-7, & \text{good implementation}\\
+      1e-5, & \text{further inspection}\\
+      1e-3, & \text{bad implementation}
+   \end{cases}
+
+.. _mini_batch:
+
+Mini-batch GD
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+For large :math:`m`, vectorization can still be slow. A solution is to use mini-batch gradient descent rather than batch gradient descent using explicit loop. We should choose a batch size, which is a hyperparameter, between 1 and :math:`m` since
+
+- if batch size is 1, each example is a batch
+- if batch size is :math:`m`, batch gradient descent is performed
+
+By convention, we choose a batch size of :math:`2^n` with :math:`n` determined by the size of the dataset. We do not consider stochastic gradient descent since it is too noisy, never converge, and breaking vectorization.
+
+After determining the batch size, run a loop of batch-size iterations to perform gradient descent on each mini-batch.
+
+Recall that the graph of the cost funciton demonstrate a mostly monotonically decreasing function. For small batch size, the cost may volatile, but it will decrease macroscopically.
+
+Batch normalization
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Batch normalization speeds up learning process. Before :ref:`normalizing inputs<input_normalization>`, normalizing :math:`z^{[l]}` helps reach the minima faster. Given :math:`z^{[l]} = z^{[l](1)}, \ldots, z^{[l](n)}` for all layers, we perform
+
+.. math::
+
+   \begin{align*}
+      \mu & = \frac{1}{m} \sum_i z^{(i)}\\
+      \sigma^2 & = \frac{1}{m} \sum_i \left(z^{(i)} - \mu \right)^2\\
+      z^{(i)}_{\text{norm}} & = \frac{z^{(i)} - \mu}{\sqrt{\sigma^2 + \epsilon}}\\
+      \tilde{z}^{(i)} & = \gamma z^{(i)} + \beta
+   \end{align*}
+
+where :math:`\gamma` and :math:`\beta` are learnable parameters, making the neural network to learn the distribution of the outputs. If :math:`\gamma = \sqrt{\sigma^2 + \epsilon}` and :math:`\beta = \mu`, we have
+
+.. math::
+
+   \tilde{z}^{(i)} = z^{(i)}
+
+Batch normalization performs on :math:`z^{[l]}` for each hidden layer, offering :math:`\tilde{z}^{[l]}` used in backward propagation. This reduces the problem of input changing or shifting, but adds noise to activations of each hidden layer within a mini batch.
+
+Batch normalization is usually applied with :ref:`mini-batches gradient descent<mini_batch>`, and can work with gradient descent with :ref:`momentum<momentum>`, :ref:`rmsprop`, and :ref:`adam`.
+
+At test time, use estimated mean and variance with :ref:`ewma`.
+
+.. warning::
+
+   :math:`L_2` regularization is still necassary for the purpose of regularization since batch normalization just normalizes hidden units and activation within a mini batch.
+
+   Moreover, bias term will be eliminated after normalization, so removing it or set it to zero.
+
+.. _momentum:
+
+GD with momentum
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The gradient descent with momentum optimization algorithm almost always works faster than standard gradient descent. The basic idea of this algorithm is to compute gradients using :ref:`ewma`, and use the gradient to update the weight and bias, adding the impact of previous iterations. It can be applied to both batch and mini-batch gradient descent.
+
+.. math::
+
+   \begin{align*}
+      v_{dW} & = \beta v_{dW} + (1 - \beta) dW\\
+      v_{db} & = \beta v_{db} + (1 - \beta) db\\
+      W & = W - \alpha v_{dW}\\
+      b & = b - \alpha v_{db}
+   \end{align*}
+
+With this algorithm, finding optimum can be achieved in fewer steps with less oscillations in vertical direction and longer jump in horizontal direction. Notice that :math:`\beta` is a hyperparameter interfering on the learning rate :math:`\alpha`, where :math:`\beta = 0.9` is a common practice.
+
+
+.. _random_initialization:
+
+Random initialization
+-------------------------
+
+Initializing the bias to zero is acceptable; but initializing the weights to zero causes different neurons learn with identical output since they are symmetrical. A common practice is to randomly assign small weights with a defined statistical distribution; if the weights are large, some activation functions tend to saturate in large values, i.e. slow learning rate. Thus, the weights should be initialized randomly to break symmetry
+
+.. code-block:: python
+
+   W = np.random.randn(layerDim[l], layerDim[l-1]) * 0.01
+   b = np.zeros((layerDim[l], 1))
+
+To avoid gradient vanishing or exploding, we want to achieve a variance of value :math:`\frac{2}{n}` by using He initialization with ReLU activations, randomly initializing weights around zero but either above and below equally
+
+.. code-block:: python
+
+   W = np.random.randn(layerDim[l], layerDim[l-1]) * np.sqrt(2 / layerDim[l-1])
+
+Other recommended activation function options are Xavier or Bengio et al activation
+
+.. math::
+
+   tanh\left(\sqrt{\frac{1}{n^{[l-1]}}}\right) \quad \text{or} \quad
+   tanh\left(\sqrt{\frac{2}{n^{[l]} + n^{[l-1]}}}\right)
+
+
+Neural network basics
+-------------------------
+
+Neurons in the shallower layers learn simple features of data, while neurons in the deeper layers learn complex charadcteristics. Usually, we count the sum of the number of hidden layers and the output layer as the total layers for a neural network, i.e. we do not count input layer.
+
+Each neuron is a two-step process computing :math:`z` and the activation function of that, and each layer has its own chosen activation function with dimension correspondent parameters.
+
+The general methodology to build a Neural Network is to
+
+1. define the neural network structure, initialize the model's parameters, and define hyperparameters
+2. loop:
+
+   - implement forward propagation and generate cache
+   - compute loss
+   - implement backward propagation with cache to get the gradients
+   - update parameters with gradient descent
+
+3. use trained parameters to predict labels
+
+Forward Pass
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given parameters :math:`A^{[l-1]}`, the formulae of forward propagation in a DNN are
+
+.. math::
+
+   \begin{align*}
+      Z^{[l]} & = W^{[l]} A^{[l-1]} + b^{[l]}\\
+      A^{[l]} & = g^{[l]}\left(Z^{[l]}\right)
+   \end{align*}
+
+generating :math:`A^{[l]}` and cache. In both ends we have
+
+.. math::
+
+   A^{0} = X \text{ and } A^{L} = \hat{y}
+
+Dimensions
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The dimensions for a :math:`m` examples are
+
+.. math::
+
+   \begin{align*}
+      W^{[l]} & \quad \left(n^{[l]}, n^{[l-1]}\right)\\
+      dW^{[l]} & \quad \left(n^{[l]}, n^{[l-1]}\right)\\
+      b^{[l]} & \quad \left(n^{[l]}, m\right)\\
+      db^{[l]} & \quad \left(n^{[l]}, m\right)\\
+      Z^{[l]} & \quad \left(n^{[l]}, m\right)\\
+      dZ^{[l]} & \quad \left(n^{[l]}, m\right)\\
+      A^{[l]} & \quad \left(n^{[l]}, m\right)\\
+      dA^{[l]} & \quad \left(n^{[l]}, m\right)\\
+   \end{align*}
+
+Backward Prop
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Given parameters :math:`dA^{[l]}` and caches from forward propagation, the formulae of backward propagation in a DNN are
+
+.. math::
+
+   \begin{align*}
+      dZ^{[l]} & = \frac{\partial \mathcal{J} }{\partial Z^{[l]}} = dA^{[l]} * g'(Z^{[l]})\\
+      dW^{[l]} & = \frac{\partial \mathcal{J} }{\partial W^{[l]}} = \frac{1}{m} dZ^{[l]}A^{[l-1]T}\\
+      db^{[l]} & = \frac{\partial \mathcal{J} }{\partial b^{[l]}} = \frac{1}{m} \sum_{i = 1}^{m} \left(dZ^{[l](i)}\right)\\
+      dZ^{[l-1]} & = \frac{\partial \mathcal{J} }{\partial Z^{[l-1]}} = dW^{[l]T} dZ^{[l]} g^{\prime [l]}\left(Z^{[l-1]}\right)\\
+      dA^{[l-1]} & = \frac{\partial \mathcal{L} }{\partial A^{[l-1]}} = W^{[l] T} dZ^{[l]}\\
+   \end{align*}
+   
+generating :math:`dA^{[l-1]}`, :math:`dW^{[l]}`, and :math:`db^{[l]}`. If we choose sigmoid activation function, we have
+
+.. math::
+
+   dZ^{[l]} = \frac{\partial \mathcal{J} }{\partial Z^{[l]}} = A^{[l]} - Y
+
+.. _activation_functions:
+
+Activation functions
+-------------------------
+
+Linear activation function resembles identity function, equipping with less solving power to the neurons. Thus, linear activation functions are commonly used in the output layer.
+
+- ``sigmoid`` function is defined as
+
+.. math::
+
+   \sigma(z) = \frac{1}{1 + e^{-z}} \approx
+   \begin{cases}
+		1, & \text{if } z \to \infty\\
+      0.5, & \text{if } z = 0\\
+      0, & \text{if } z \to \infty
+   \end{cases}
+
+.. math::
+
+   \sigma^{\prime}(z) = a(1-a) \approx
+   \begin{cases}
+		0, & \text{if } z \to \infty\\
+      0.25, & \text{if } z = 0\\
+      0, & \text{if } z \to \infty
+   \end{cases}
+
+- ``tanh`` function is mostly better than sigmoid function since it pushes teh mean to zero to make next learning process easier
+
+.. math::
+
+   tanh(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}} \approx
+   \begin{cases}
+		 1, & \text{if } z \to \infty\\
+       0, & \text{if } z = 0\\
+      -1, & \text{if } z \to \infty
+   \end{cases}
+
+.. math::
+
+   tanh^{\prime}(z) \approx
+   \begin{cases}
+		0, & \text{if } z \to \infty\\
+      1, & \text{if } z = 0\\
+      0, & \text{if } z \to \infty
+   \end{cases}
+
+- ``ReLU`` function (Rectified Linear Unit) learns much faster because of constant slope
+
+.. math::
+
+   ReLU(z) = max(0, z) \approx
+   \begin{cases}
+		z, & \text{if } z \geq 0\\
+      0, & \text{if } z < 0
+   \end{cases}
+
+.. math::
+
+   ReLU^{\prime}(z) \approx
+   \begin{cases}
+		1, & \text{if } z \geq 0\\
+      0, & \text{if } z < 0
+   \end{cases}
+
+- ``leaky ReLU`` function (Rectified Linear Unit) is usually defined with :math:`\alpha = 0.01` as
+
+.. math::
+
+   leaky\_ReLU(z) = max(0, \alpha z) \approx
+   \begin{cases}
+		z, & \text{if } z \geq 0\\
+      \alpha z, & \text{if } z < 0
+   \end{cases}
+
+.. math::
+
+   leaky\_ReLU^{\prime}(z) \approx
+   \begin{cases}
+		1, & \text{if } z \geq 0\\
+      \alpha , & \text{if } z < 0
+   \end{cases}
+
+
+Regularization
+-------------------------
+
+We often encounter two regularization schemes
+
+- :math:`L_2` regularization is :math:`\|m\|^{2}_{2} = \sum^{n_x}_{i = 1} w^2_i = w^Tw`
+- :math:`L_1` regularization is :math:`\|m\|_{1} = \sum^{n_x}_{i = 1} |w_i|`
+- :math:`L_2` regularization also named weight decay, and :math:`L_1` regularization shrinks model size by changing some weights to zero.
+
+Logistic regression
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Regularization for logistic regression is to minimize :math:`\mathcal{J}(w,b)` with regularization parameter :math:`\lambda`, which is a hyperparameter in the DNN
+
+.. math::
+
+   J_{regularized} = \small \underbrace{ \frac{1}{m} \sum_{i=1}^{m} \mathcal{L}\left(\hat{y}^{(i)}, y^{(i)}\right) }_\text{cross-entropy cost} + \small \underbrace{ \frac{\lambda}{2 m} \|w\|_{2}^{2} + \frac{\lambda}{2 m} \sum_{i=1}^{m} b^{(i)^2} }_{L_2 \text{ regularization cost}}
+
+where the last term, or regularization on bias, is usually omitted. The denominator of the regularization term is a scale parameter.
+
+Neural network
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Regularization for neural networks is to minimize :math:`\mathcal{J}` for all layers, that is
+
+.. math::
+
+   J\left(w^{[1]}, b^{[1]}, \ldots, w^{[L]}, b^{[L]}\right)=\frac{1}{m} \sum_{i=1}^{n} \mathcal{L}\left(\hat{y}^{(i)}, y^{(i)}\right)+\frac{\lambda}{2 m} \sum_{l=1}^{L}\left\|w^{[l]}\right\|_{F}^{2}
+
+where :math:`\|w^{[l]}\|^2_F = \sum^{n^{[l]}}_{i = 1} \sum^{n^{[l-1]}}_{j=1} \left(w_{ij}^{[l]}\right)` is the Frobenius norm.
+
+Weight update
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Recall from backward propagation we have
+
+.. math::
+
+   dW^{[l]} = \frac{\partial \mathcal{J} }{\partial W^{[l]}} = \frac{1}{m} dZ^{[l]}A^{[l-1]T}
+
+With regularization, we update by
+
+.. math::
+
+   dW^{[l]} = \frac{1}{m} dZ^{[l]}A^{[l-1]T} + \frac{\lambda}{m} W^{[l]}
+
+then weight matrix update process becomes
+
+.. math::
+
+   \begin{align*}
+      W^{[l]} & = W^{[l]} - \alpha dW^{[l]}\\
+      & = W^{[l]} - \alpha \left[\frac{1}{m} dZ^{[l]}A^{[l-1]T} + \frac{\lambda}{m} W^{[l]} \right]\\
+      & = W^{[l]} - \frac{\alpha \lambda}{m} W^{[l]} - \alpha \left[\frac{1}{m} dZ^{[l]}A^{[l-1]T} \right]\\
+      & = \left(1 - \frac{\alpha \lambda}{m}\right) - \alpha \left[\frac{1}{m} dZ^{[l]}A^{[l-1]T} \right]\\
+   \end{align*}
+
+where :math:`\left(1 - \frac{\alpha \lambda}{m}\right) < 1` causing the weight decays, with an inverse relationship exists between parameters :math:`W^{[l]}` and :math:`\lambda`.
+
+If :math:`\lambda` is set too large, some weights become zero causing a smaller neural network. Take ``tanh`` activation function, if :math:`\lambda` is properly set, the activations are roughly linear, learning fastest and preventing overfitting.
+
+.. tip::
+
+   When implementing gradient descent, one debug method is to plot the cost function :math:`\mathcal{J}` as a function of the number of iterations of gradient descent. 
+   
+   The cost function should decrease monotonically after every evaluation of gradient descent with regularization. If you plot the cost function without regularization, then you might not see it decrease monotonically.
+
+Dropout regularization
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The intuition is that the model cannot rely on any features, so have to spread out weights. Formally, dropout regularization eliminates some neurons/weights on each iteration based on a probability. A most common technique is inverted dropout
+
+.. code-block:: python
+
+   # set 0 <= keep_prob <= 1
+   keep_prob = 0.8
+   # initialize matrix d
+   d = np.random.rand(a[l].shape[0], a[l].shape[1])
+   # convert entries of d to 0 or 1
+   d = (d < keep_prob).astype(int)
+   # shut down some neurons of a
+   a = a * d
+   # scale the value of alive neurons
+   a = a / keep_prob     
+
+- Dropout can have different value of parameter ``keep_prob`` per layer.
+- The dropout for input layer has to be near one.
+- Dropout isn’t used at test time because it would add noise to predictions.
+- Apply dropout both during forward and backward propagation.
+- If you're more worried about some layers overfitting than others, apply dropout to certain layers with just one hyperparameter ``keep_prob``.
+- A downside of dropout is that the cost function is not well defined, hard to debug. To solve this, turn off dropout, i.e. setting ``keep_prob`` to one, and check the cost function do decrease monotonically.
+
+.. _input_normalization:
+
+Input normalization
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Normalize inputs will speed up the training process. We use the mean and variance of teh training set to apply normalization to training, dev, and test sets in the way
+
+.. math::
+
+   \frac{x^{(i)} - \mu}{\sigma^2}
+
+The cost function is inconsistent (or elongated) and hard to optimize. With normalization, the cost function will be consistent and symmetrical and optimized faster with less volatility.
+
+Other methods
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+**Data augmentation** is to create more data based on current data easily and cheaply, e.g. image rotation, horizontally flipping, zooming.
+
+**Early stopping** may be of cheaper price and shorter time to prevent overfitting. Usually, we plot the training set and the dev set cost together for each iteration. At some iteration the dev set cost will stop decreasing and will start increasing, and we pick the point at which the training set error and dev set error are best.
+
+- One advantage is that no hyperparameters are investigated, unlike lambda in :math:`L_2` regularization.
+- One downside is that early stopping tries to simultaneously optimize the cost function with gradient descent and prevent overfitting with regularization, breaking orthogonalization. Hence, we prefer to use :math:`L_2` regularization
+
+
+.. _ewma:
+
+EWMA
+-------------------------
+
+Exponentially weighted moving averages (EWMA) optimization algorithm is better than gradient descent with general equation
+
+.. math::
+
+   v_t = \beta v_{t-1} + (1 - \beta) \theta_t
+
+which represents the averages over :math:`\frac{1}{1 - \beta}` units. Small :math:`\beta` value implies putting more weights on recent data, responding quickly to regressions with noisier curve, while large :math:`\beta` value implies a delayed regression and smoother curve. Given values for :math:`\theta`, we calculate and interpret :math:`v_{\text{today}}` from historical values.
+
+Since :math:`v_0 = 0` by default, the first few values from EWMA formula suffers from accuracy. To solve this, we apply bias correction by dividing correction factor as :math:`\frac{v_t}{1 - \beta^t}`. As :math:`t` becomes larger, the correction factor approaches one, applying almost no effect to future values.
+
+
+.. _rmsprop:
+
+RMSprop
+-------------------------
+
+Root Mean Square prop (RMSprop) optimization algorithm speeds up the gradient descent, and makes the cost function move slower on the vertical direction and faster on the horizontal direction. Learning rate increases with this algorithm.
+
+.. math::
+
+   \begin{align*}
+      S_{dW} & = \beta S_{dW} + (1 - \beta) dW^2\\
+      S_{db} & = \beta S_{db} + (1 - \beta) db^2\\
+      W & = W - \alpha \frac{dW}{\sqrt{S_{dW}} + \epsilon}\\
+      b & = b - \alpha \frac{db}{\sqrt{S_{db}} + \epsilon}\\
+   \end{align*}
+
+.. tip::
+
+   The :math:`\epsilon` term ensures a non-zero denominator.
+
+
+.. _adam:
+
+Adam
+-------------------------
+
+Adaptive Moment Estimation (Adam) optimization algorithm is basically a combination of gradient descent with momentum and RMSprop, and it works well with numerous NN architectures.
+
+.. math::
+
+   \begin{align*}
+      v_{dW} & = \beta_1 v_{dW} + (1 - \beta_1) dW\\
+      v_{db} & = \beta_1 v_{db} + (1 - \beta_1) db\\
+      S_{dW} & = \beta_2 S_{dW} + (1 - \beta_2) dW^2\\
+      S_{db} & = \beta_2 S_{db} + (1 - \beta_2) db^2\\
+   \end{align*}
+
+.. math::
+
+   \begin{align*}
+      v^{\text{corrected}}_{dW} & = \frac{v_{dW}}{1 - \beta^t_1}\\
+      v^{\text{corrected}}_{db} & = \frac{v_{db}}{1 - \beta^t_1}\\
+      S^{\text{corrected}}_{dW} & = \frac{S_{dW}}{1 - \beta^t_2}\\
+      S^{\text{corrected}}_{db} & = \frac{S_{db}}{1 - \beta^t_2}\\
+   \end{align*}
+
+.. math::
+
+   \begin{align*}
+      W & = W - \alpha \frac{v^{\text{corrected}}_{dW}}{\sqrt{S^{\text{corrected}}_{dW}} + \epsilon}\\
+      b & = b - \alpha \frac{v^{\text{corrected}}_{db}}{\sqrt{S^{\text{corrected}}_{db}} + \epsilon}\\
+   \end{align*}
+
+The hyperparameters in this algorithm with recommended value in brackets are learning rate :math:`\alpha` needed to be tuned, :math:`\beta_1 = 0.9`, :math:`\beta_2 = 0.999`, and :math:`\epsilon = 10^{-8}`.
+
+:math:`\alpha` decay
+-------------------------
+
+Mini-batch gradient descent may never reach optimum. However, by tuning the learning rate :math:`\alpha` to be smaller near the convergence point, we may reach optimum.
+
+The number of epochs is a hyperparameter that defines the number times that the learning algorithm will work through the entire training dataset, or one pass over the training set. One epoch means that each sample in the training dataset has had an opportunity to update the internal model parameters.
+
+Several techniques to control :math:`\alpha` are discrete staircase, manual control, and the following
+
+.. math::
+
+   \begin{align*}
+      \alpha & = \alpha_0 \frac{1}{1 + \text{decay rate} \times \text{epoch num}}\\
+      \alpha & = \alpha_0 \frac{k}{\sqrt{\text{epoch num}}}\\
+      \alpha & = \alpha_0 \cdot 0.95^{\text{epoch num}}
+   \end{align*}
+
+
+Hyperparameters
+-------------------------
+
+Currently, we discussed several hyperparameters including learning rate :math:`\alpha`, :math:`\beta`, :math:`\beta_1`, :math:`\beta_2`, :math:`\epsilon`, number of layers, number of hidden units, :math:`\alpha` decay, mini-batch size, activation functions, regularization lambda :math:`\lambda`.
+
+When sampling hyperparameters, random generator is used rather than grid system to offer better variation and perception on importance and range. In addition, coarse to fine is a sampling scheme which zooms spaces with better performance.
+
+Given a specific range for a hyperparameter, it is better to use the logarithm scale rather than linear scale to search for an ideal value. For different NN architectures and projects, hyperparameter setting may or may not vary. Babysitting model is used to manually tune the hyperparameters if computational resources are limited; if enough computational power, try runing model for different hyperparameter values in parallel.
+
+Some deep learning developers know exactly what hyperparameter to tune in order to try to achieve one effect. This is orthogonalization, a process to adjust one or a set of parameters withous changing the rest.
+
+

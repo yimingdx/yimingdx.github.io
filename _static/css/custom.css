@@ -1,0 +1,185 @@
+/* Override selected aspects of pydata-sphinx-theme and sphinx-design. */
+
+/* Navbar icons: keep default navbar layout, only normalize icon size. */
+
+:root {
+    --navbar-icon-size: 1.15rem;
+}
+
+/* Site logo */
+.bd-header .navbar-brand img,
+.bd-header .logo__image {
+    max-height: 24px !important;
+    width: auto !important;
+}
+
+/* Search button icon */
+.bd-header button.search-button svg,
+.bd-header .search-button svg {
+    width: var(--navbar-icon-size) !important;
+    height: var(--navbar-icon-size) !important;
+}
+
+/* Color mode / theme switcher icon */
+.bd-header button.theme-switch-button svg,
+.bd-header .theme-switch-button svg,
+.bd-header .theme-switch-button i {
+    width: var(--navbar-icon-size) !important;
+    height: var(--navbar-icon-size) !important;
+    font-size: var(--navbar-icon-size) !important;
+}
+
+/* FontAwesome / inline SVG navbar icons: GitHub, LinkedIn, etc. */
+.bd-header .navbar-icon-links svg,
+.bd-header .navbar-icon-links i {
+    width: var(--navbar-icon-size) !important;
+    height: var(--navbar-icon-size) !important;
+    font-size: var(--navbar-icon-size) !important;
+}
+
+/* Local image icon: LeetCode */
+.bd-header .navbar-icon-links img.icon-link-image,
+.bd-header img.icon-link-image[src*="leetcode"] {
+    width: var(--navbar-icon-size) !important;
+    height: var(--navbar-icon-size) !important;
+    max-width: var(--navbar-icon-size) !important;
+    max-height: var(--navbar-icon-size) !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    object-fit: contain !important;
+}
+
+/* Slightly tighten spacing so larger icons do not spread too much. */
+.bd-header .navbar-icon-links .nav-link,
+.bd-header button.search-button,
+.bd-header button.theme-switch-button {
+    padding-left: 0.25rem !important;
+    padding-right: 0.25rem !important;
+}
+
+/* General content */
+
+table {
+    width: auto;
+}
+
+
+/* Homepage profile image */
+
+.profile-image {
+    max-width: 100%;
+    height: auto;
+}
+
+
+/* Homepage overview cards: sphinx-design */
+
+.intro-card {
+    border-radius: 0;
+    padding: 24px 10px 20px 10px;
+    margin: 10px 0;
+    background-color: transparent !important;
+}
+
+.intro-card p {
+    margin: 0;
+}
+
+/* Card top image/icon */
+.intro-card img.sd-card-img-top,
+.intro-card .sd-card-img-top {
+    display: block !important;
+    height: 52px !important;
+    width: auto !important;
+    max-width: 72px !important;
+    margin: 0 auto 0.6rem auto !important;
+    padding: 0 !important;
+    background: transparent !important;
+    border: 0 !important;
+    border-radius: 0 !important;
+    box-shadow: none !important;
+}
+
+/* Card title */
+.intro-card .sd-card-title {
+    border: none;
+    background-color: transparent;
+    font-size: var(--pst-font-size-h5);
+    font-weight: bold;
+    padding: 0.6rem 0 0.5rem 0 !important;
+    margin-top: 0 !important;
+}
+
+/* Card body/footer */
+.intro-card .sd-card-body,
+.intro-card .sd-card-header,
+.intro-card .sd-card-footer {
+    background: transparent !important;
+}
+
+.intro-card .sd-card-body {
+    padding-top: 0.25rem !important;
+    padding-bottom: 0.75rem !important;
+}
+
+.intro-card .sd-card-footer {
+    border-top: 0 !important;
+    box-shadow: none !important;
+    background: transparent !important;
+    padding-top: 0.5rem !important;
+}
+
+.intro-card .sd-card-footer p {
+    max-width: 220px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.intro-card .sd-btn {
+    max-width: 220px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* Disable content selection safely.
+   Keep inputs, textareas, code blocks, and buttons selectable/usable. */
+
+.bd-article-container {
+    -webkit-user-select: none;
+    -webkit-touch-callout: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.bd-article-container pre,
+.bd-article-container code,
+.bd-article-container input,
+.bd-article-container textarea,
+.bd-article-container button {
+    -webkit-user-select: text;
+    -webkit-touch-callout: default;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
+}
+
+
+/* Disable profile image interaction only.
+   This does not disable navbar icons, card buttons, or copy buttons. */
+
+.bd-article-container img.profile-image {
+    pointer-events: none;
+}
+
+
+/* Disable page printing. */
+
+@media print {
+
+    html,
+    body {
+        display: none;
+    }
+}

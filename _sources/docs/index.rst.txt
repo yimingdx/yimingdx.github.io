@@ -1,0 +1,20 @@
+.. _docs:
+
+=========================
+Docs
+=========================
+
+An elegant-design and concise guide for selected computer science topics.
+
+.. toctree::
+   :maxdepth: 1
+   
+   python_selected
+   java_selected
+   numpy_guide
+   pandas_guide
+   matlab_guide
+   scipy_selected
+   git_selected
+   shell_script
+   neural_networks

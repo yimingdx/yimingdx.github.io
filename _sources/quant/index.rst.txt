@@ -1,0 +1,13 @@
+.. _quant:
+
+=========================
+Quant
+=========================
+
+An elegant-design and concise guide for selected topics of quantitative discipline.
+
+.. toctree::
+   :maxdepth: 1
+   
+   binomial_model
+   black_scholes_model

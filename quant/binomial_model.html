@@ -1,0 +1,605 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Binomial Model Guide</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=83efd11e" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=a137fcc9"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=d626efca"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>window.MathJax = {"tex": {"inlineMath": [["$", "$"], ["\\(", "\\)"]], "processEscapes": true}, "options": {"ignoreHtmlClass": "tex2jax_ignore|mathjax_ignore|document", "processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-mml-chtml.js"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'quant/binomial_model';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Black Scholes Guide" href="black_scholes_model.html" />
+    <link rel="prev" title="Quant" href="index.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.2.0-rc1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the blog..."
+         aria-label="Search the blog..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.svg" class="logo__image only-light" alt=" - Home"/>
+    <img src="../_static/logo.svg" class="logo__image only-dark pst-js-only" alt=" - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../docs/index.html">
+    Docs
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Quant
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about/index.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/yimingdx" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.linkedin.com/in/yimingdai/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">LinkedIn</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://leetcode.com/yimingdai/" title="LeetCode" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/img/leetcode.svg" class="icon-link-image" alt="LeetCode"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../docs/index.html">
+    Docs
+  </a>
+</li>
+
+
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Quant
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about/index.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/yimingdx" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.linkedin.com/in/yimingdai/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">LinkedIn</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://leetcode.com/yimingdai/" title="LeetCode" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/img/leetcode.svg" class="icon-link-image" alt="LeetCode"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">Binomial Model Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="black_scholes_model.html">Black Scholes Guide</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Quant</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">Binomial Model Guide</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="binomial-model-guide">
+<span id="binomial-model"></span><h1>Binomial Model Guide<a class="headerlink" href="#binomial-model-guide" title="Link to this heading">#</a></h1>
+<p>This is an elegant-design introduction to binomial model, geared mainly for new users.</p>
+<section id="assumptions">
+<h2>Assumptions<a class="headerlink" href="#assumptions" title="Link to this heading">#</a></h2>
+<p>Binomial model is for discrete time finance, and is have key assumptions:</p>
+<ul class="simple">
+<li><p>an asset value changes only at discrete time intervals</p></li>
+<li><p>fractional trading is allowed</p></li>
+<li><p>an asset’s worth can change to one of only two possible new values at each time step.</p></li>
+</ul>
+<p>In option pricing theory, key assumptions are</p>
+<ul class="simple">
+<li><p>short selling allowed</p></li>
+<li><p>no arbitrage opportunities</p></li>
+</ul>
+<p>and relaxable assumptions are</p>
+<ul class="simple">
+<li><p>frictionless markets - no transaction costs, limits to trading or taxes</p></li>
+<li><p>perfect liquidity</p></li>
+<li><p>known volatility and interest rates</p></li>
+<li><p>no dividends on the underlying</p></li>
+</ul>
+</section>
+<section id="delta-hedged-portfolio">
+<h2>Delta-hedged portfolio<a class="headerlink" href="#delta-hedged-portfolio" title="Link to this heading">#</a></h2>
+<p>Growing or decreasing of the option price is irrelevant, but price range is related to volatility. The larger the volatility, the greater the range. Later we will see that the drift does not exist when pricing derivatives in the binomial model.</p>
+<p>To solve the option value, set up a portfolio <span class="math notranslate nohighlight">\(\Pi\)</span> consisting of one long position in an option and short <span class="math notranslate nohighlight">\(\Delta\)</span> shares</p>
+<div class="math notranslate nohighlight">
+\[\Pi = V - \Delta S\]</div>
+<p>where <span class="math notranslate nohighlight">\(V\)</span> is value of the option, <span class="math notranslate nohighlight">\(\Delta\)</span> is the number of shares, and <span class="math notranslate nohighlight">\(S\)</span> is the stock price. By balancing <span class="math notranslate nohighlight">\(\Pi^+\)</span> and <span class="math notranslate nohighlight">\(\Pi^-\)</span> we could solve the value of <span class="math notranslate nohighlight">\(\Delta\)</span> where</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\Pi^+ = V^+ - \Delta S^+\\
+\Pi^- = V^- - \Delta S^-\end{split}\]</div>
+<p>or calculated directly by</p>
+<div class="math notranslate nohighlight">
+\[\Delta = \frac{V^+ - V^-}{S^+ - S^-}\]</div>
+<p>in discrete time. In continuous time, we write <span class="math notranslate nohighlight">\(\Delta = \frac{\partial V}{\partial S}\)</span>. This choice of <span class="math notranslate nohighlight">\(\Delta\)</span> makes <span class="math notranslate nohighlight">\(\Pi\)</span> risk-free, so no-arbitrage suggests that the return on <span class="math notranslate nohighlight">\(\Pi\)</span> equal the risk-free rate, i.e.</p>
+<div class="math notranslate nohighlight">
+\[e^{rT} \Pi = \Pi^+ = \Pi^-\]</div>
+<p>which derives</p>
+<div class="math notranslate nohighlight">
+\[V = e^{-rT} \left(qV^+ + (1-q)V^-\right)\]</div>
+<p>where we define</p>
+<div class="math notranslate nohighlight">
+\[q = \frac{e^{rT}S - S^-}{S^+ - S^-}\]</div>
+<p>with <span class="math notranslate nohighlight">\(0 &lt; q &lt; 1\)</span>. In discrete time finance, this becomes</p>
+<div class="math notranslate nohighlight">
+\[V = (1 - rT) \left(qV^+ + (1-q)V^-\right) = (1 - rT) \mathbb{E}^{\mathbb{Q}}[\text{payoff}]\]</div>
+<p>where we define</p>
+<div class="math notranslate nohighlight">
+\[q = \frac{(1 + rT)S - S^-}{S^+ - S^-}\]</div>
+<p>Pricing an option using the risk neutral probability, <span class="math notranslate nohighlight">\(q\)</span>, will make neither a profit nor a loss, while pricing an option using the real probability, <span class="math notranslate nohighlight">\(p\)</span>, will probably make you a profit or loss.</p>
+</section>
+<section id="self-financing-portfolio">
+<h2>Self-financing portfolio<a class="headerlink" href="#self-financing-portfolio" title="Link to this heading">#</a></h2>
+<p>Another aspect of binomial model is replication the option using only cash (or bonds) and the asset, by rearraging the equation from</p>
+<div class="math notranslate nohighlight">
+\[\Pi = V - \Delta S\]</div>
+<p>to</p>
+<div class="math notranslate nohighlight">
+\[V = \Pi + \Delta S\]</div>
+<p>Consider the prerequisites:</p>
+<ul class="simple">
+<li><p><span class="math notranslate nohighlight">\(s_u\)</span> to be the price going up and <span class="math notranslate nohighlight">\(s_d\)</span> to be the price going down</p></li>
+<li><p>the option <span class="math notranslate nohighlight">\(X\)</span> pays off <span class="math notranslate nohighlight">\(x_u\)</span> if the asset price is <span class="math notranslate nohighlight">\(s_u\)</span> and <span class="math notranslate nohighlight">\(x_d\)</span> if <span class="math notranslate nohighlight">\(s_d\)</span></p></li>
+<li><p>the dynamics of the risk-free asset <span class="math notranslate nohighlight">\(B_t\)</span> satisfies <span class="math notranslate nohighlight">\(dB_t = rB_t dt\)</span> where <span class="math notranslate nohighlight">\(B_0 = 1\)</span>, or <span class="math notranslate nohighlight">\(B_t = e^{rt}B_0\)</span> in continuous time.</p></li>
+</ul>
+<p>Now consider a portfolio of <span class="math notranslate nohighlight">\(\psi\)</span> bonds with one-year duration and <span class="math notranslate nohighlight">\(\phi\)</span> assets at <span class="math notranslate nohighlight">\(t = 0\)</span> with initial value of</p>
+<div class="math notranslate nohighlight">
+\[V = \Pi(\psi, \phi) = \phi s + \psi\]</div>
+<p>After a timestamp, we replicate the option by insisting</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}x_u = V^+ = \Pi^+ = \phi s_u + \psi e^r\\
+x_d = V^- = \Pi^- = \phi s_d + \psi e^r\end{split}\]</div>
+<p>which derives a hedging strategy with</p>
+<div class="math notranslate nohighlight">
+\[\phi = \frac{x_u - x_d}{s_u - s_d}, ~ \psi = e^{-r} \frac{x_d s_u - x_u s_d}{s_u - s_d}\]</div>
+<p>Define</p>
+<div class="math notranslate nohighlight">
+\[q = \frac{e^{r}s - s_d}{s_u - s_d},\]</div>
+<p>we have</p>
+<div class="math notranslate nohighlight">
+\[V = e^{-r} (qx_u + (1 - q)x_d) = \mathbb{E}^{\mathbb{Q}}\left[e^{-r(T - t)}X\right]\]</div>
+<p>where <span class="math notranslate nohighlight">\(0 &lt; q &lt; 1\)</span> and <span class="math notranslate nohighlight">\((T - t)\)</span> to be time to maturity. The set of probabilities <span class="math notranslate nohighlight">\(\mathbb{Q} = \{q, (1-q)\}\)</span> is called a risk-neutral measure. Risk neutral/fair value under <span class="math notranslate nohighlight">\(\mathbb{Q}\)</span> of a call is less than the expected value of the call under <span class="math notranslate nohighlight">\(\mathbb{P}\)</span>.</p>
+<p>Currently, three methods of option pricing are introduced: delta-hedged portfolio, self-financing portfolio or replication, and one using risk-neutral probabilities.</p>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="index.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Quant</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="black_scholes_model.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Black Scholes Guide</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#assumptions">Assumptions</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#delta-hedged-portfolio">Delta-hedged portfolio</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#self-financing-portfolio">Self-financing portfolio</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2021-2026, Yiming Dai.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

@@ -1,0 +1,187 @@
+.. _scipy_selected:
+
+=========================
+SciPy Selected
+=========================
+
+This is an elegant-design introduction to SciPy, geared mainly for new users. You can see more complex recipes at `SciPy`_.
+
+
+Composition
+-------------------------
+
+SciPy is composed of task-specific sub-modules:
+
+=========================== ==========================================
+``scipy.cluster``           Vector quantization / Kmeans
+``scipy.constants``         Physical and mathematical constants
+``scipy.fftpack``           Fourier transform
+``scipy.integrate``         Integration routines
+``scipy.interpolate``       Interpolation
+``scipy.io``                Data input and output
+``scipy.linalg``            Linear algebra routines
+``scipy.ndimage``           n-dimensional image package
+``scipy.odr``               Orthogonal distance regression
+``scipy.optimize``          Optimization
+``scipy.signal``            Signal processing
+``scipy.sparse``            Sparse matrices
+``scipy.spatial``           Spatial data structures and algorithms
+``scipy.special``           Any special mathematical functions
+``scipy.stats``             Statistics
+=========================== ==========================================
+
+The main namespace of SciPy contains original Numpy functions, so we do not import ``scipy`` only. Though SciPy is independent from Numpy, the modules depend on Numpy. For more information about Numpy, check out :ref:`numpy_guide`. 
+
+The conventional way of importing Numpy and SciPy modules necessary for illustration is:
+
+.. ipython:: python
+
+   import numpy as np
+   import scipy.io as sio
+   import scipy.special as special
+   import scipy.integrate as integrate
+   from scipy import stats
+   from scipy import linalg
+   from scipy import optimize
+   from scipy.interpolate import interp1d
+
+Next, we illustrate the common usage of libraries we imported with detailed examples.
+
+
+IO Management
+-------------------------
+
+Load and save MATLAB files:
+
+.. ipython:: python
+
+   rng = np.random.default_rng()
+   rand = rng.random(3)
+   rand
+   sio.savemat("rand.mat", {"rand" : rand})
+   var = sio.loadmat("rand.mat")
+   var["rand"]
+
+.. ipython:: python
+   :suppress:
+
+   import os
+   os.remove("rand.mat")
+
+.. warning::
+
+   Notice MATLAB does not support 1D arrays; the shape of 1D arrays in Numpy and MATLAB are different with **(n,)** for Numpy and **(1, n)** for MATLAB by default.
+
+
+Integration
+-------------------------
+
+.. code-block:: ipython
+
+   In [-]: help(integrate)
+   Out[-]: 
+
+   Integrating functions, given function object
+   ============================================
+
+      quad          -- General purpose integration
+      quad_vec      -- General purpose integration of vector-valued functions
+      dblquad       -- General purpose double integration
+      tplquad       -- General purpose triple integration
+      nquad         -- General purpose N-D integration
+      fixed_quad    -- Integrate func(x) using Gaussian quadrature of order n
+      quadrature    -- Integrate with given tolerance using Gaussian quadrature
+      romberg       -- Integrate func using Romberg integration
+      quad_explain  -- Print information for use of quad
+      newton_cotes  -- Weights and error coefficient for Newton-Cotes integration
+      IntegrationWarning -- Warning on issues during integration
+      AccuracyWarning  -- Warning on issues during quadrature integration
+   
+   Integrating functions, given fixed samples
+   ==========================================
+
+      trapezoid            -- Use trapezoidal rule to compute integral.
+      cumulative_trapezoid -- Use trapezoidal rule to cumulatively compute integral.
+      simpson              -- Use Simpson's rule to compute integral from samples.
+      romb                 -- Use Romberg Integration to compute integral from
+                           -- (2**k + 1) evenly-spaced samples.
+   
+   Solving initial value problems for ODE systems
+   ==============================================
+   The solvers are implemented as individual classes, which can be used directly
+   (low-level usage) or through a convenience function.
+   
+      solve_ivp     -- Convenient function for ODE integration.
+      RK23          -- Explicit Runge-Kutta solver of order 3(2).
+      RK45          -- Explicit Runge-Kutta solver of order 5(4).
+      DOP853        -- Explicit Runge-Kutta solver of order 8.
+      Radau         -- Implicit Runge-Kutta solver of order 5.
+      BDF           -- Implicit multi-step variable order (1 to 5) solver.
+      LSODA         -- LSODA solver from ODEPACK Fortran package.
+      OdeSolver     -- Base class for ODE solvers.
+      DenseOutput   -- Local interpolant for computing a dense output.
+      OdeSolution   -- Class which represents a continuous ODE solution.
+
+Integrate a bessel function ``jv(3.5,x)`` using ``quad`` along the interval :math:`[0, 4]`
+
+.. math::
+
+   I = \int^{4}_{0} J_{3.5} (x) dx
+
+.. ipython:: python
+
+   integrate.quad(lambda x: special.jv(3.5 ,x), 0, 4)
+
+The return value is a tuple, with the first element holding the estimated value of the integral and the second element holding an upper bound on the error.
+
+
+Linear algebra
+-------------------------
+
+Calculate determinant and matrix inverse.
+
+.. ipython:: python
+
+   a = rng.random((3, 3))
+   linalg.det(a)
+   linalg.inv(a)
+
+
+Interpolation
+-------------------------
+
+Perform linear and cubic interpolation with 1D data.
+
+.. ipython:: python
+
+   x = np.linspace(0, 10, num=11, endpoint=True)
+   y = np.cos(-x**2/9.0)
+   f1 = interp1d(x, y)
+   f2 = interp1d(x, y, kind='cubic')
+   xnew = np.linspace(0, 10, num=41, endpoint=True)
+   plt.plot(x, y, 'o', xnew, f1(xnew), '-', xnew, f2(xnew), '--')
+ 
+.. image:: ../_static/img/scipy_interp1d.png
+   :align: center
+
+
+Root finding
+-------------------------
+
+Finding the roots of a scalar function.
+
+.. ipython:: python
+
+   def f(x):
+      return x**2 + 10*np.sin(x)
+
+   root1 = optimize.root(f, x0=1)
+   root1
+   root2 = optimize.root(f, x0=-2.5)
+   (root1.x, root2.x)
+
+.. image:: ../_static/img/scipy_root.png
+   :align: center
+
+
+.. _SciPy: http://scipy.github.io/devdocs/index.html

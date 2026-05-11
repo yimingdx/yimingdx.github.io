@@ -1,0 +1,128 @@
+.. _black_scholes_model:
+
+=========================
+Black Scholes Guide
+=========================
+
+This is an elegant-design introduction to black scholes model, geared mainly for new users. The end result is a diffusion-type partial differential equation used for derivative pricing. The option value will depend on variables :math:`S` and :math:`t`, parameters :math:`\sigma` and :math:`\mu` associated with the asset price following GBM, :math:`E` and :math:`T` associated with the particular contract, and :math:`r` associated with currency, namely
+
+.. math::
+
+   V(S, t; \sigma, \mu; E, T; r) = V(S, t)
+
+
+Assumptions
+-------------------------
+
+- The underlying follows a lognormal random walk with known volatility, i.e.
+
+.. math::
+
+   \frac{dS}{S} = \mu dt + \sigma dW, ~ \mu, \sigma, r(t) \in \mathbb{R}
+
+- No dividends on the underlying or :math:`D = 0`
+- Delta hedging is done continuously
+- No transaction costs on the underlying
+- No arbitrage opportunities
+  
+A Special Portfolio
+-------------------------
+
+Set up a portfolio :math:`\Pi` consisting of one long position in an option and short :math:`\Delta` shares in continuous time world
+
+.. math::
+
+   \Pi = V(S, t) - \Delta S
+
+where :math:`V` is value of the option depending on :math:`S` and :math:`t`, :math:`\Delta` is the number of shares, and :math:`S` is the stock price. Changes in the option value and the underlying both contribute to the change in the portfolio value.
+
+.. math::
+
+   d\Pi = dV(S, t) - \Delta dS
+
+Note that :math:`\Delta` is fixed from time step :math:`t` to :math:`t + dt`, but recalculation is needed at a new time step.
+
+Random terms
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+From Ito we have
+
+.. math::
+
+   d V = \frac{\partial V}{\partial t} d t+\frac{\partial V}{\partial S} d S+\frac{1}{2} \sigma^{2} S^{2} \frac{\partial^{2} V}{\partial S^{2}} d t
+
+The random change in portfolio is therefore
+
+.. math::
+
+   d \Pi = \frac{\partial V}{\partial t} d t+\frac{\partial V}{\partial S} d S+\frac{1}{2} \sigma^{2} S^{2} \frac{\partial^{2} V}{\partial S^{2}} d t - \Delta dS
+
+and, after plugging :math:`dS = \mu S dt + \sigma S dW`, the random terms in our portfolio are
+
+.. math::
+
+   \left(\sigma S \frac{\partial V}{\partial S} - \Delta \sigma S \right) dW
+
+where the risk can be eliminated by carefully choosing :math:`\Delta` to be
+
+.. math::
+
+   \Delta = \frac{\partial V}{\partial S}
+
+in order to reduce the randomness to zero. Delta hedgeing is the perfect elimination of risk, and it is a dynamic hedging strategy where continuous rebalancing is necessary.
+
+Deterministic terms
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+After determining the random terms, we are left with deterministic changes which is completely risk-free, namely
+
+.. math::
+
+   d \Pi = \left(\frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2}\right) dt
+
+Intuitively, another risk-free portfolio is just compounding at a risk-free rate, or
+
+.. math::
+
+   \left(\frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 \S^2 \frac{\partial^2 V}{\partial S^2}\right) dt = d \Pi = r \Pi dt = r \left(V - S \frac{\partial V}{\partial S}\right) dt
+
+Dividing above equation by :math:`dt` and rearraging we get
+
+.. math::
+
+   \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^2 S^2 \frac{\partial^2 V}{\partial S^2} + r S \frac{\partial V}{\partial S} - r V = 0
+
+and this is the **Black-Scholes equation**, a linear parabolic partial differential equation since it is linear in the first order and ?. It contains all variables and parameters but the drift term :math:`\mu`, so the volatility :math:`\sigma` determines the value of derivatives. 
+
+In a **complete market**, an option can be replicated only with the underlying. If :math:`\Delta` is the partial derivative of some option value then the portfolio will yield the same amount as the option payoff.
+
+Note that the Black Scholes equation is defined independent of options. We must specify the :math:`V(S, T)` as a final condition.
+
+
+BSE for option contracts
+-------------------------
+
+Assume the asset receives a continuous and constant dividend **yield** :math:`D`, so each time step the asset receives :math:`D S dt`. Putting into the Black-Scholes equation and choosing :math:`\Delta = \frac{\partial V}{\partial S}` we get
+
+.. math::
+
+   \begin{align*}
+   d \Pi
+   & = dV - \Delta dS - D \Delta S dt\\
+   & = \frac{\partial V}{\partial t} d t+\frac{\partial V}{\partial S} d S+\frac{1}{2} \sigma^{2} S^{2} \frac{\partial^{2} V}{\partial S^{2}} d t - \Delta dS - D \Delta S dt\\
+   \Rightarrow 0 & = \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^{2} S^{2} \frac{\partial^{2} V}{\partial S^{2}} + (r - D) S \frac{\partial V}{\partial S} - r V
+   \end{align*}
+
+Options on currencies are handled the same way as dividend-paying stock. We receive interest at a foreign rate of :math:`r_f` while holding the foreign currency
+
+.. math::
+
+   \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^{2} S^{2} \frac{\partial^{2} V}{\partial S^{2}} + (r - r_f) S \frac{\partial V}{\partial S} - r V = 0
+
+Commodity options require cost of carry :math:`q`, which is the cost of storage
+
+.. math::
+
+   \frac{\partial V}{\partial t} + \frac{1}{2} \sigma^{2} S^{2} \frac{\partial^{2} V}{\partial S^{2}} + (r + q) S \frac{\partial V}{\partial S} - r V = 0
+
+Notice that here we use a positive sign in the Black-Scholes equation since, though we may sell the commodity to the counterparty, it is our responsibility to store and secure.
