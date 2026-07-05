@@ -1,0 +1,1042 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="../" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>CLI Selected</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  <!--
+    this give us a css class that will be invisible only if js is disabled
+  -->
+  <noscript>
+    <style>
+      .pst-js-only { display: none !important; }
+
+    </style>
+  </noscript>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../_static/styles/theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+<link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
+
+    <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=24eed9dd" />
+  
+  <!-- So that users can add custom icons -->
+  <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb" />
+<link rel="preload" as="script" href="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb" />
+
+    <script src="../_static/documentation_options.js?v=a137fcc9"></script>
+    <script src="../_static/doctools.js?v=fd6eb6e6"></script>
+    <script src="../_static/sphinx_highlight.js?v=6ffebe34"></script>
+    <script src="../_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="../_static/copybutton.js?v=d626efca"></script>
+    <script src="../_static/design-tabs.js?v=f930bc37"></script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'docs/cli_selected';</script>
+    <script>DOCUMENTATION_OPTIONS.search_as_you_type = false;</script>
+    <link rel="icon" href="../_static/favicon.ico"/>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Shell Script Guide" href="shell_script.html" />
+    <link rel="prev" title="SciPy Selected" href="scipy_selected.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  <meta name="docsearch:version" content="1.2.0-rc1" />
+  
+    
+    <script src="../_static/searchtools.js"></script>
+    <script src="../_static/language_data.js"></script>
+    <script src="../searchindex.js"></script>
+  
+  </head>
+  <body data-default-mode="">
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+  
+  
+  
+  
+  <dialog id="pst-search-dialog">
+    
+<form class="bd-search d-flex align-items-center"
+      action="../search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         placeholder="Search the blog..."
+         aria-label="Search the blog..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form>
+  </dialog>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header id="pst-header" class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+<div class="bd-header__inner bd-page-width">
+  <button class="pst-navbar-icon sidebar-toggle primary-toggle" aria-label="Site navigation">
+    <span class="fa-solid fa-bars"></span>
+  </button>
+  
+  
+  <div class=" navbar-header-items__start">
+    
+      <div class="navbar-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="../index.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="../_static/logo.svg" class="logo__image only-light" alt=" - Home"/>
+    <img src="../_static/logo.svg" class="logo__image only-dark pst-js-only" alt=" - Home"/>
+  
+  
+</a></div>
+    
+  </div>
+  
+  <div class=" navbar-header-items">
+    
+    <div class="me-auto navbar-header-items__center">
+      
+        <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Docs
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quant/index.html">
+    Quant
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about/index.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+      
+    </div>
+    
+    
+    <div class="navbar-header-items__end">
+      
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+      
+        <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+      
+        <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/yimingdx" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.linkedin.com/in/yimingdai/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">LinkedIn</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://leetcode.com/yimingdai/" title="LeetCode" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/img/leetcode.svg" class="icon-link-image" alt="LeetCode"/></a>
+        </li>
+</ul></div>
+      
+    </div>
+    
+  </div>
+  
+  
+
+  
+    <button class="pst-navbar-icon sidebar-toggle secondary-toggle" aria-label="On this page">
+      <span class="fa-solid fa-outdent"></span>
+    </button>
+  
+</div>
+
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <dialog id="pst-primary-sidebar-modal"></dialog>
+      <div id="pst-primary-sidebar" class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+      <div class="sidebar-header-items__center">
+        
+          
+          
+            <div class="navbar-item">
+<nav>
+  <ul class="bd-navbar-elements navbar-nav">
+    
+<li class="nav-item current active">
+  <a class="nav-link nav-internal" href="index.html">
+    Docs
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../quant/index.html">
+    Quant
+  </a>
+</li>
+
+
+<li class="nav-item ">
+  <a class="nav-link nav-internal" href="../about/index.html">
+    About
+  </a>
+</li>
+
+  </ul>
+</nav></div>
+          
+        
+      </div>
+    
+    
+    
+      <div class="sidebar-header-items__end">
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm pst-navbar-icon search-button search-button__button pst-js-only" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+</button></div>
+        
+          <div class="navbar-item">
+
+<button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button pst-js-only" aria-label="Color mode" data-bs-title="Color mode"  data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <i class="theme-switch fa-solid fa-sun                fa-lg" data-mode="light" title="Light"></i>
+  <i class="theme-switch fa-solid fa-moon               fa-lg" data-mode="dark"  title="Dark"></i>
+  <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"  title="System Settings"></i>
+</button></div>
+        
+          <div class="navbar-item"><ul class="navbar-icon-links"
+    aria-label="Icon Links">
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://github.com/yimingdx" title="GitHub" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-github fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">GitHub</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://www.linkedin.com/in/yimingdai/" title="LinkedIn" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><i class="fa-brands fa-linkedin fa-lg" aria-hidden="true"></i>
+            <span class="sr-only">LinkedIn</span></a>
+        </li>
+        <li class="nav-item">
+          
+          
+          
+          
+          
+          
+          
+          
+          <a href="https://leetcode.com/yimingdai/" title="LeetCode" class="nav-link pst-navbar-icon" rel="noopener" target="_blank" data-bs-toggle="tooltip" data-bs-placement="bottom"><img src="../_static/img/leetcode.svg" class="icon-link-image" alt="LeetCode"/></a>
+        </li>
+</ul></div>
+        
+      </div>
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item pst-sidebar-collapse"><button id="pst-collapse-sidebar-button" aria-expanded="true" aria-controls="pst-primary-sidebar"><svg class="pst-icon svg-inline--fa" role="img" aria-hidden="true" focusable="false" viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg">
+    <path fill="currentColor" d="M3 15.5C2.36232 15.5 1.74874 15.2564 1.28478 14.8189C0.820828 14.3815 0.541576 13.7832 0.504167 13.1467L0.5 13L0.5 3C0.499965 2.36232 0.743605 1.74874 1.18107 1.28478C1.61854 0.820828 2.21676 0.541576 2.85333 0.504167L3 0.5L13 0.5C13.6377 0.499965 14.2513 0.743605 14.7152 1.18107C15.1792 1.61854 15.4584 2.21676 15.4958 2.85333L15.5 3L15.5 13C15.5 13.6377 15.2564 14.2513 14.8189 14.7152C14.3815 15.1792 13.7832 15.4584 13.1467 15.4958L13 15.5L3 15.5ZM3 13.8333L10.5 13.8333L10.5 2.16667L3 2.16667C2.79589 2.16669 2.59889 2.24163 2.44636 2.37726C2.29383 2.5129 2.19638 2.69979 2.1725 2.9025L2.16667 3L2.16667 13C2.16669 13.2041 2.24163 13.4011 2.37726 13.5536C2.5129 13.7062 2.69979 13.8036 2.9025 13.8275L3 13.8333ZM6.65583 10.325L6.5775 10.2558L4.91083 8.58917C4.76735 8.44567 4.68116 8.25476 4.66843 8.05223C4.65569 7.84971 4.71729 7.6495 4.84167 7.48917L4.91083 7.41083L6.5775 5.74417C6.72747 5.59471 6.9287 5.50794 7.14032 5.50148C7.35194 5.49502 7.55809 5.56935 7.7169 5.70937C7.8757 5.8494 7.97525 6.04463 7.99533 6.25539C8.01541 6.46616 7.95451 6.67667 7.825 6.84417L7.75583 6.9225L6.67917 8L7.75583 9.0775C7.89931 9.22099 7.98551 9.41191 7.99824 9.61443C8.01097 9.81695 7.94938 10.0172 7.825 10.1775L7.75583 10.2558C7.61234 10.3993 7.42142 10.4855 7.2189 10.4982C7.01638 10.511 6.81617 10.4494 6.65583 10.325Z"/>
+  </svg>
+  <span class="pst-collapse-sidebar-label">Collapse Sidebar</span>
+  <span class="pst-expand-sidebar-label">Expand Sidebar</span>
+</button></div>
+        <div class="sidebar-primary-item">
+
+<nav class="bd-docs-nav bd-links"
+     aria-label="Section Navigation">
+  <p class="bd-links__title" role="heading" aria-level="1">Section Navigation</p>
+  <div class="bd-toc-item navbar-nav"><ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="python_selected.html">Python Selected</a></li>
+<li class="toctree-l1"><a class="reference internal" href="java_selected.html">Java Selected</a></li>
+<li class="toctree-l1"><a class="reference internal" href="numpy_guide.html">Numpy Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pandas_guide.html">pandas Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="matlab_guide.html">MATLAB Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="scipy_selected.html">SciPy Selected</a></li>
+<li class="toctree-l1 current active"><a class="current reference internal" href="#">CLI Selected</a></li>
+<li class="toctree-l1"><a class="reference internal" href="shell_script.html">Shell Script Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="neural_networks.html">Neural Networks Guide</a></li>
+</ul>
+</div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item">
+
+<nav aria-label="Breadcrumb" class="d-print-none">
+  <ul class="bd-breadcrumbs">
+    
+    <li class="breadcrumb-item breadcrumb-home">
+      <a href="../index.html" class="nav-link" aria-label="Home">
+        <i class="fa-solid fa-home"></i>
+      </a>
+    </li>
+    
+    <li class="breadcrumb-item"><a href="index.html" class="nav-link">Docs</a></li>
+    
+    <li class="breadcrumb-item active" aria-current="page"><span class="ellipsis">CLI Selected</span></li>
+  </ul>
+</nav>
+</div>
+      
+    </div>
+  
+  
+</div>
+</div>
+              
+              
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section id="cli-selected">
+<span id="id1"></span><h1>CLI Selected<a class="headerlink" href="#cli-selected" title="Link to this heading">#</a></h1>
+<section id="git-ssh-setup-guide">
+<span id="git-ssh"></span><h2>Git SSH Setup Guide<a class="headerlink" href="#git-ssh-setup-guide" title="Link to this heading">#</a></h2>
+<section id="ssh-key-generation">
+<h3>SSH Key Generation<a class="headerlink" href="#ssh-key-generation" title="Link to this heading">#</a></h3>
+<p>First check for existing keys:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>lc<span class="w"> </span>-al<span class="w"> </span>~/.ssh
+</pre></div>
+</div>
+<p>Use <code class="docutils literal notranslate"><span class="pre">ssh-keygen</span></code> to generate new the SSH key with the email registering GitHub:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ssh-keygen<span class="w"> </span>-t<span class="w"> </span>ed25519<span class="w"> </span>-C<span class="w"> </span><span class="s2">&quot;&lt;xxx&gt;@email.com&quot;</span>
+<span class="go">Generating public/private ed25519 key pair.</span>
+<span class="go">Enter file in which to save the key:</span>
+<span class="go">...</span>
+<span class="go">Enter passphrase (empty for no passphrase):</span>
+<span class="go">...</span>
+</pre></div>
+</div>
+<div class="admonition important">
+<p class="admonition-title">Important</p>
+<p>Your passphrase should be complicated, and you must store it safely.</p>
+</div>
+<div class="admonition note">
+<p class="admonition-title">Note</p>
+<p>A passphrase is a memorized secret consisting of a sequence of words or other text that a claimant uses to authenticate their identity. Here, it refers to a secret used to protect an encryption key. Commonly, an actual encryption key is derived from the passphrase and used to encrypt the protected resource.</p>
+</div>
+<p>Fire up the SSH agent and add the SSH key to <code class="docutils literal notranslate"><span class="pre">~/.ssh</span></code> on your local machine:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">eval</span><span class="w"> </span><span class="sb">`</span>ssh-agent<span class="w"> </span>-s<span class="sb">`</span>
+<span class="gp">$ </span>ssh-add<span class="w"> </span>~/.ssh/id_ed25519
+<span class="go">Enter passphrase for /Users/&lt;user&gt;/.ssh/id_ed25519:</span>
+<span class="go">...</span>
+<span class="go">Identity added: /Users/&lt;user&gt;/.ssh/id_ed25519</span>
+</pre></div>
+</div>
+</section>
+<section id="ssh-key-link">
+<h3>SSH Key Link<a class="headerlink" href="#ssh-key-link" title="Link to this heading">#</a></h3>
+<p>Pull up the key:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>cat<span class="w"> </span>~/.ssh/id_ed25519.pub
+</pre></div>
+</div>
+<p>now copy the output, navigate to Github settings, and add the SSH key</p>
+<img alt="../_images/ssh_key.png" class="align-center" src="../_images/ssh_key.png" />
+</section>
+<section id="login-escape">
+<h3>Login Escape<a class="headerlink" href="#login-escape" title="Link to this heading">#</a></h3>
+<p>If it is asking you for a username and password when manipulating with GitHub, your origin remote is pointing at the HTTPS url rather than the SSH url. You need to change it to SSH url:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>remote<span class="w"> </span>set-url<span class="w"> </span>origin<span class="w"> </span>git@github.com:&lt;username&gt;/&lt;repo&gt;.git
+</pre></div>
+</div>
+</section>
+<section id="configure-git-identity">
+<h3>Configure Git Identity<a class="headerlink" href="#configure-git-identity" title="Link to this heading">#</a></h3>
+<p>Set global identity</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.name<span class="w"> </span><span class="s2">&quot;Yiming Dai&quot;</span>
+<span class="gp">$ </span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>user.email<span class="w"> </span><span class="s2">&quot;yiming.dai@example.com&quot;</span>
+</pre></div>
+</div>
+<p>Ensure the email matches your GitHub account for commit attribution.</p>
+<p>Set <code class="docutils literal notranslate"><span class="pre">main</span></code> as default</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>init.defaultBranch<span class="w"> </span>main
+</pre></div>
+</div>
+<p>Enable colors</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>config<span class="w"> </span>--global<span class="w"> </span>color.ui<span class="w"> </span>auto
+</pre></div>
+</div>
+</section>
+</section>
+<section id="git-branch-recovery">
+<h2>Git Branch Recovery<a class="headerlink" href="#git-branch-recovery" title="Link to this heading">#</a></h2>
+<section id="remote-branch-recovery">
+<h3>Remote branch recovery<a class="headerlink" href="#remote-branch-recovery" title="Link to this heading">#</a></h3>
+<p>If we have pushed the branch to a remote server, we could use <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">reflog</span></code> to recover easily and reliably. Suppose we have following commit history to the branch named <code class="docutils literal notranslate"><span class="pre">main</span></code> with corresponding activity id:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>reflog
+<span class="go">1ed7510 HEAD@{1}: commit: message 1</span>
+<span class="go">70b3696 HEAD@{2}: commit: message 2</span>
+<span class="go">98f2fc2 HEAD@{3}: commit: message 3</span>
+</pre></div>
+</div>
+<p>we could find the target commit and push back to origin to recover:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>checkout<span class="w"> </span>-b<span class="w"> </span>main<span class="w"> </span>1ed7510
+<span class="gp">$ </span>add<span class="w"> </span>-A
+<span class="gp">$ </span>push<span class="w"> </span>origin<span class="w"> </span>main
+</pre></div>
+</div>
+</section>
+<section id="local-branch-recovery">
+<h3>Local branch recovery<a class="headerlink" href="#local-branch-recovery" title="Link to this heading">#</a></h3>
+<p>If we have <strong>not</strong> pushed the branch, we could create a list of all dangling or unreachable commits, where the commits are copied into <cite>.git/lost-found/commit/</cite>, and non-commit objects are copied into <cite>.git/lost-found/other/</cite>,</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>fsck<span class="w"> </span>--full<span class="w"> </span>--no-reflogs<span class="w"> </span>--unreachable<span class="w"> </span>--lost-found
+<span class="go">unreachable tree 4a407b1b09e0d8a16be70aa1547332432a698e18</span>
+<span class="go">unreachable tree 5040d8cf08c78119e66b9a3f8c4b61a240229259</span>
+<span class="go">unreachable tree 60c0ce61b040f5e604850f747f525e88043dae12</span>
+</pre></div>
+</div>
+<p>print a list of commit messages for all commits in the lost and found,</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>ls<span class="w"> </span>-1<span class="w"> </span>.git/lost-found/commit/<span class="w"> </span><span class="p">|</span><span class="w"> </span>xargs<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>git<span class="w"> </span>log<span class="w"> </span>-n<span class="w"> </span><span class="m">1</span><span class="w"> </span>--pretty<span class="o">=</span>oneline
+<span class="go">9ae38fc6b0548cab08ccee1178db0ba0edeafdb2 foo # target commit</span>
+<span class="go">6ed99e63db69ca04f0cc78081a1fd471289551b2 On master: search and reset</span>
+<span class="go">973d9be3e2cefcd0c5801ad9cd1b2e18774b4bee Rename decorator proxy</span>
+<span class="go">9efa6b28b3b0a89c312484f28cf589385d613dfd On master: mysql db config</span>
+</pre></div>
+</div>
+<p>and create a new branch with the missing commit as the branch head:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>checkout<span class="w"> </span>-b<span class="w"> </span>&lt;branch-name&gt;<span class="w"> </span>9ae38fc
+<span class="go">Switched to a new branch &lt;branch-name&gt;</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="vmware-fusion-ubuntu-ssh-agent-hang">
+<h2>VMware Fusion / Ubuntu SSH Agent Hang<a class="headerlink" href="#vmware-fusion-ubuntu-ssh-agent-hang" title="Link to this heading">#</a></h2>
+<section id="problem">
+<h3>Problem<a class="headerlink" href="#problem" title="Link to this heading">#</a></h3>
+<p>Inside an Ubuntu guest running in VMware Fusion, SSH test may hang after reboot even when the GitHub SSH key is valid and already appears in the SSH public-key identitiy list. This may GitHub has accepted the public key, but the local SSH client cannot complete the signing step through the current SSH agent or desktop keyring. The reliable fix is to avoid the desktop keyring agent and use a dedicated OpenSSH agent socket.</p>
+</section>
+<section id="confirm-the-key-works">
+<h3>Confirm the Key Works<a class="headerlink" href="#confirm-the-key-works" title="Link to this heading">#</a></h3>
+<p>Bypass the agent and force SSH to read the private key directly:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="w"> </span>ssh<span class="w"> </span>-vvvT<span class="w"> </span>git@github.com
+</pre></div>
+</div>
+<p>If this prompts for the private key passphrase and then prints:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">Hi &lt;username&gt;! You&#39;ve successfully authenticated, but GitHub does not provide shell access.</span>
+</pre></div>
+</div>
+<p>then the key is correct, the GitHub account has the right public key, and the problem is the local SSH agent/keyring path.</p>
+</section>
+<section id="one-session-fix">
+<h3>One-Session Fix<a class="headerlink" href="#one-session-fix" title="Link to this heading">#</a></h3>
+<p>Use a dedicated OpenSSH agent socket instead of the desktop keyring agent:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>rm<span class="w"> </span>-f<span class="w"> </span>~/.ssh/agent.sock
+<span class="gp">$ </span><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>ssh-agent<span class="w"> </span>-a<span class="w"> </span>~/.ssh/agent.sock<span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span>
+<span class="gp">$ </span><span class="nb">export</span><span class="w"> </span><span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.ssh/agent.sock&quot;</span>
+<span class="gp">$ </span>ssh-add<span class="w"> </span>~/.ssh/id_ed25519
+<span class="gp">$ </span>ssh<span class="w"> </span>-T<span class="w"> </span>git@github.com
+</pre></div>
+</div>
+<p>Line-by-line explanation:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">rm</span> <span class="pre">-f</span> <span class="pre">~/.ssh/agent.sock</span></code></dt><dd><p>Removes any stale SSH agent socket left from a previous login, reboot, or crashed agent. The <code class="docutils literal notranslate"><span class="pre">-f</span></code> flag suppresses errors if the file does not exist.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">eval</span> <span class="pre">&quot;$(ssh-agent</span> <span class="pre">-a</span> <span class="pre">~/.ssh/agent.sock</span> <span class="pre">-s)&quot;</span></code></dt><dd><p>Starts a new OpenSSH agent and tells it to listen on a fixed socket path, <code class="docutils literal notranslate"><span class="pre">~/.ssh/agent.sock</span></code>. The <code class="docutils literal notranslate"><span class="pre">eval</span></code> applies the environment variables printed by <code class="docutils literal notranslate"><span class="pre">ssh-agent</span></code> to the current shell.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">export</span> <span class="pre">SSH_AUTH_SOCK=&quot;$HOME/.ssh/agent.sock&quot;</span></code></dt><dd><p>Tells SSH and <code class="docutils literal notranslate"><span class="pre">ssh-add</span></code> to use this dedicated OpenSSH agent instead of GNOME Keyring, GCR, or another desktop-provided agent.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ssh-add</span> <span class="pre">~/.ssh/id_ed25519</span></code></dt><dd><p>Loads the private key into the dedicated agent. If the key has a passphrase, this is where the passphrase should be entered.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-T</span> <span class="pre">git&#64;github.com</span></code></dt><dd><p>Tests SSH authentication against GitHub. The <code class="docutils literal notranslate"><span class="pre">-T</span></code> flag disables pseudo-terminal allocation, which is appropriate because GitHub does not provide shell access.</p>
+</dd>
+</dl>
+</section>
+<section id="persistent-shell-fix">
+<h3>Persistent Shell Fix<a class="headerlink" href="#persistent-shell-fix" title="Link to this heading">#</a></h3>
+<p>Add this to <code class="docutils literal notranslate"><span class="pre">~/.zshrc</span></code>:</p>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span><span class="c1"># Use a dedicated OpenSSH agent for this shell.</span>
+<span class="nb">export</span><span class="w"> </span><span class="nv">SSH_AUTH_SOCK</span><span class="o">=</span><span class="s2">&quot;</span><span class="nv">$HOME</span><span class="s2">/.ssh/agent.sock&quot;</span>
+
+<span class="k">if</span><span class="w"> </span>!<span class="w"> </span>ssh-add<span class="w"> </span>-l<span class="w"> </span>&gt;/dev/null<span class="w"> </span><span class="m">2</span>&gt;<span class="p">&amp;</span><span class="m">1</span><span class="p">;</span><span class="w"> </span><span class="k">then</span>
+<span class="w">  </span>rm<span class="w"> </span>-f<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SSH_AUTH_SOCK</span><span class="s2">&quot;</span>
+<span class="w">  </span><span class="nb">eval</span><span class="w"> </span><span class="s2">&quot;</span><span class="k">$(</span>ssh-agent<span class="w"> </span>-a<span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SSH_AUTH_SOCK</span><span class="s2">&quot;</span><span class="w"> </span>-s<span class="k">)</span><span class="s2">&quot;</span><span class="w"> </span>&gt;/dev/null
+<span class="w">  </span>ssh-add<span class="w"> </span>~/.ssh/id_ed25519
+<span class="k">fi</span>
+</pre></div>
+</div>
+<p>This ensures that new shell sessions use the fixed OpenSSH agent socket. The <code class="docutils literal notranslate"><span class="pre">ssh-add</span> <span class="pre">-l</span></code> check asks whether the current agent already has identities. If it fails, the script removes the old socket, starts a new agent, and loads the private key.</p>
+</section>
+<section id="github-ssh-config">
+<h3>GitHub SSH Config<a class="headerlink" href="#github-ssh-config" title="Link to this heading">#</a></h3>
+<p>Use this <code class="docutils literal notranslate"><span class="pre">~/.ssh/config</span></code> block:</p>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Host github.com
+  HostName ssh.github.com
+  User git
+  IdentityFile ~/.ssh/id_ed25519
+  Port 443
+  IdentitiesOnly yes
+  AddressFamily inet
+  AddKeysToAgent no
+  IdentityAgent ~/.ssh/agent.sock
+</pre></div>
+</div>
+<p>Line-by-line explanation:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">Host</span> <span class="pre">github.com</span></code></dt><dd><p>Defines rules used when the command targets <code class="docutils literal notranslate"><span class="pre">github.com</span></code>, for example <code class="docutils literal notranslate"><span class="pre">ssh</span> <span class="pre">-T</span> <span class="pre">git&#64;github.com</span></code> or <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">clone</span> <span class="pre">git&#64;github.com:&lt;user&gt;/&lt;repo&gt;.git</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">HostName</span> <span class="pre">ssh.github.com</span></code></dt><dd><p>Connects to GitHub’s SSH-over-HTTPS endpoint. This is useful on networks where the default SSH port <code class="docutils literal notranslate"><span class="pre">22</span></code> is blocked.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">User</span> <span class="pre">git</span></code></dt><dd><p>Uses the required GitHub SSH username. GitHub SSH authentication always uses <code class="docutils literal notranslate"><span class="pre">git</span></code> as the SSH user, not the GitHub account name.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">IdentityFile</span> <span class="pre">~/.ssh/id_ed25519</span></code></dt><dd><p>Selects the private key to use for GitHub authentication.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">Port</span> <span class="pre">443</span></code></dt><dd><p>Uses port <code class="docutils literal notranslate"><span class="pre">443</span></code> instead of the default SSH port <code class="docutils literal notranslate"><span class="pre">22</span></code>. This pairs with <code class="docutils literal notranslate"><span class="pre">HostName</span> <span class="pre">ssh.github.com</span></code>.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">IdentitiesOnly</span> <span class="pre">yes</span></code></dt><dd><p>Forces SSH to use only the explicitly configured identity file instead of trying every key available in the agent.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">AddressFamily</span> <span class="pre">inet</span></code></dt><dd><p>Forces IPv4. This can avoid IPv6-related connection issues in virtual machines or constrained networks.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">AddKeysToAgent</span> <span class="pre">no</span></code></dt><dd><p>Prevents SSH from automatically adding the key to an arbitrary default agent. This avoids accidentally reusing the problematic desktop/keyring agent.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">IdentityAgent</span> <span class="pre">~/.ssh/agent.sock</span></code></dt><dd><p>Forces SSH to use the dedicated OpenSSH agent socket created above.</p>
+</dd>
+</dl>
+</section>
+<section id="verification">
+<h3>Verification<a class="headerlink" href="#verification" title="Link to this heading">#</a></h3>
+<p>After restarting the terminal, check the active agent and test GitHub:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">echo</span><span class="w"> </span><span class="s2">&quot;</span><span class="nv">$SSH_AUTH_SOCK</span><span class="s2">&quot;</span>
+<span class="go">/home/&lt;user&gt;/.ssh/agent.sock</span>
+
+<span class="gp">$ </span>ssh-add<span class="w"> </span>-l<span class="w"> </span>-E<span class="w"> </span>sha256
+<span class="go">256 SHA256:&lt;fingerprint&gt; &lt;email&gt; (ED25519)</span>
+
+<span class="gp">$ </span>ssh<span class="w"> </span>-T<span class="w"> </span>git@github.com
+<span class="go">Hi &lt;username&gt;! You&#39;ve successfully authenticated, but GitHub does not provide shell access.</span>
+</pre></div>
+</div>
+</section>
+</section>
+<section id="tiling-assistant">
+<h2>Tiling Assistant<a class="headerlink" href="#tiling-assistant" title="Link to this heading">#</a></h2>
+<section id="overview">
+<h3>Overview<a class="headerlink" href="#overview" title="Link to this heading">#</a></h3>
+<p>Tiling Assistant enhances GNOME’s native window management with quarter tiling,
+window groups, advanced snap layouts, and configurable keyboard shortcuts.</p>
+<p>The extension can be installed either from Ubuntu packages or manually from the
+upstream release archive.</p>
+</section>
+<section id="prerequisites">
+<h3>Prerequisites<a class="headerlink" href="#prerequisites" title="Link to this heading">#</a></h3>
+<p>Install GNOME extension support tools:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>apt<span class="w"> </span>update
+<span class="gp">$ </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>gnome-shell-extensions<span class="w"> </span><span class="se">\</span>
+<span class="w">    </span>gnome-shell-extension-manager
+</pre></div>
+</div>
+<p>Verify GNOME Shell version:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gnome-shell<span class="w"> </span>--version
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">GNOME Shell 50.1</span>
+</pre></div>
+</div>
+</section>
+<section id="manual-installation-upstream-release">
+<h3>Manual Installation (Upstream Release)<a class="headerlink" href="#manual-installation-upstream-release" title="Link to this heading">#</a></h3>
+<p>Download the latest Tiling Assistant ZIP release and place it in
+<code class="docutils literal notranslate"><span class="pre">~/Downloads</span></code>.</p>
+<p>Inspect the extension metadata to determine the extension UUID:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>unzip<span class="w"> </span>-p<span class="w"> </span>tiling-assistant*.zip<span class="w"> </span>metadata.json
+</pre></div>
+</div>
+<p>Create the local extension directory using the UUID from
+<code class="docutils literal notranslate"><span class="pre">metadata.json</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>mkdir<span class="w"> </span>-p<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>~/.local/share/gnome-shell/extensions/tiling-assistant@leleat-on-github
+</pre></div>
+</div>
+<p>Extract the extension:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>unzip<span class="w"> </span>tiling-assistant*.zip<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>-d<span class="w"> </span>~/.local/share/gnome-shell/extensions/tiling-assistant@leleat-on-github
+</pre></div>
+</div>
+<p>Log out and log back in to reload GNOME Shell.</p>
+</section>
+<section id="ubuntu-package-variant">
+<h3>Ubuntu Package Variant<a class="headerlink" href="#ubuntu-package-variant" title="Link to this heading">#</a></h3>
+<p>Ubuntu may already provide a packaged version of Tiling Assistant.</p>
+<p>List installed tiling extensions:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gnome-extensions<span class="w"> </span>list<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>tiling
+</pre></div>
+</div>
+<p>Example:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">tiling-assistant@ubuntu.com</span>
+</pre></div>
+</div>
+<p>The Ubuntu package uses a different UUID than the upstream project:</p>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>Variant</p></th>
+<th class="head"><p>UUID</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>Ubuntu package</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tiling-assistant&#64;ubuntu.com</span></code></p></td>
+</tr>
+<tr class="row-odd"><td><p>Upstream release</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">tiling-assistant&#64;leleat-on-github</span></code></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Only one variant should normally be enabled.</p>
+</section>
+<section id="enable-extension">
+<h3>Enable Extension<a class="headerlink" href="#enable-extension" title="Link to this heading">#</a></h3>
+<p>Upstream installation:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gnome-extensions<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>tiling-assistant@leleat-on-github
+</pre></div>
+</div>
+<p>Ubuntu package:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gnome-extensions<span class="w"> </span><span class="nb">enable</span><span class="w"> </span>tiling-assistant@ubuntu.com
+</pre></div>
+</div>
+</section>
+<section id="id2">
+<h3>Verification<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
+<p>Confirm that the extension is installed:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gnome-extensions<span class="w"> </span>list<span class="w"> </span><span class="p">|</span><span class="w"> </span>grep<span class="w"> </span>tiling
+</pre></div>
+</div>
+<p>Display extension information:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gnome-extensions<span class="w"> </span>info<span class="w"> </span>tiling-assistant@ubuntu.com
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gnome-extensions<span class="w"> </span>info<span class="w"> </span>tiling-assistant@leleat-on-github
+</pre></div>
+</div>
+<p>Expected state:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">State: ENABLED</span>
+</pre></div>
+</div>
+</section>
+<section id="configuration">
+<h3>Configuration<a class="headerlink" href="#configuration" title="Link to this heading">#</a></h3>
+<p>Open the extension preferences dialog:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gnome-extensions<span class="w"> </span>prefs<span class="w"> </span>tiling-assistant@ubuntu.com
+</pre></div>
+</div>
+<p>or</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>gnome-extensions<span class="w"> </span>prefs<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>tiling-assistant@leleat-on-github
+</pre></div>
+</div>
+</section>
+</section>
+<section id="git-storage-cleanup">
+<h2>Git Storage Cleanup<a class="headerlink" href="#git-storage-cleanup" title="Link to this heading">#</a></h2>
+<section id="du-command">
+<h3><code class="docutils literal notranslate"><span class="pre">du</span></code> command<a class="headerlink" href="#du-command" title="Link to this heading">#</a></h3>
+<p><code class="docutils literal notranslate"><span class="pre">du</span></code> estimates disk usage. It is useful for finding which directories make a repository large.</p>
+<p>Correct usage on Ubuntu:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>du<span class="w"> </span>-hs<span class="w"> </span>.git<span class="w"> </span><span class="nb">source</span><span class="w"> </span>archive<span class="w"> </span>yimingdx.github.io<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-h
+<span class="gp">$ </span>du<span class="w"> </span>-hs<span class="w"> </span>--max-depth<span class="o">=</span><span class="m">2</span><span class="w"> </span>.<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-h
+</pre></div>
+</div>
+<p>In <code class="docutils literal notranslate"><span class="pre">zsh</span></code>, this command is wrong:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>du<span class="w"> </span>-sh<span class="w"> </span>.<span class="o">[</span>!.<span class="o">]</span>*<span class="w"> </span>*<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-h
+<span class="go">zsh: event not found: .]</span>
+</pre></div>
+</div>
+<p>because <code class="docutils literal notranslate"><span class="pre">!</span></code> is treated as history expansion. We could quote the pattern:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>du<span class="w"> </span>-sh<span class="w"> </span><span class="s1">&#39;.[!.]*&#39;</span><span class="w"> </span>*<span class="w"> </span><span class="m">2</span>&gt;/dev/null<span class="w"> </span><span class="p">|</span><span class="w"> </span>sort<span class="w"> </span>-h
+</pre></div>
+</div>
+</section>
+<section id="check-git-object-storage">
+<h3>Check Git Object Storage<a class="headerlink" href="#check-git-object-storage" title="Link to this heading">#</a></h3>
+<p>Check the total size of <code class="docutils literal notranslate"><span class="pre">.git</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>du<span class="w"> </span>-sh<span class="w"> </span>.git
+</pre></div>
+</div>
+<p>Inspect Git object storage:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>count-objects<span class="w"> </span>-vH
+</pre></div>
+</div>
+<p>Important fields:</p>
+<dl class="simple">
+<dt><code class="docutils literal notranslate"><span class="pre">size-pack</span></code></dt><dd><p>Size of packed reachable Git objects.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">size-garbage</span></code></dt><dd><p>Size of garbage objects, if any.</p>
+</dd>
+<dt><code class="docutils literal notranslate"><span class="pre">in-pack</span></code></dt><dd><p>Number of objects stored in packfiles.</p>
+</dd>
+</dl>
+<p>Find the largest files stored anywhere in Git history:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>rev-list<span class="w"> </span>--objects<span class="w"> </span>--all<span class="w"> </span><span class="p">|</span>
+<span class="go">  git cat-file --batch-check=&#39;%(objecttype) %(objectname) %(objectsize) %(rest)&#39; |</span>
+<span class="go">  awk &#39;$1==&quot;blob&quot; {printf &quot;%.1f MiB\t%s\t%s\n&quot;, $3/1024/1024, $2, $4}&#39; |</span>
+<span class="go">  sort -nr |</span>
+<span class="go">  head -30</span>
+</pre></div>
+</div>
+<p>This lists large Git blobs, not only files currently present in the working tree. A deleted image can still appear here if it exists in commit history.</p>
+</section>
+<section id="safe-prune-without-rewriting-history">
+<h3>Safe Prune Without Rewriting History<a class="headerlink" href="#safe-prune-without-rewriting-history" title="Link to this heading">#</a></h3>
+<p>Do not manually delete files inside <code class="docutils literal notranslate"><span class="pre">.git/objects</span></code>. That can corrupt the repository.</p>
+<p>First make sure the working tree is clean:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>status<span class="w"> </span>--short
+</pre></div>
+</div>
+<p>Then run aggressive local cleanup:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>reflog<span class="w"> </span>expire<span class="w"> </span>--expire<span class="o">=</span>now<span class="w"> </span>--expire-unreachable<span class="o">=</span>now<span class="w"> </span>--all
+<span class="gp">$ </span>git<span class="w"> </span>gc<span class="w"> </span>--prune<span class="o">=</span>now<span class="w"> </span>--aggressive
+<span class="gp">$ </span>git<span class="w"> </span>count-objects<span class="w"> </span>-vH
+<span class="gp">$ </span>du<span class="w"> </span>-sh<span class="w"> </span>.git
+</pre></div>
+</div>
+<p>This removes unreachable objects and expired reflog references. It does not remove large files that are still reachable from existing commits.</p>
+</section>
+<section id="remove-large-files-from-git-history">
+<h3>Remove Large Files From Git History<a class="headerlink" href="#remove-large-files-from-git-history" title="Link to this heading">#</a></h3>
+<p>If a large image was committed and later deleted, normal <code class="docutils literal notranslate"><span class="pre">git</span> <span class="pre">gc</span></code> is not enough. The blob is still reachable from old commits, so Git must keep it.</p>
+<p>To remove large files from history, use <code class="docutils literal notranslate"><span class="pre">git-filter-repo</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>apt<span class="w"> </span>update
+<span class="gp">$ </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>git-filter-repo
+</pre></div>
+</div>
+<p>Make a backup clone before rewriting history:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>..
+<span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>--mirror<span class="w"> </span>&lt;repo&gt;<span class="w"> </span>&lt;repo&gt;.backup.git
+<span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>&lt;repo&gt;
+</pre></div>
+</div>
+<p>Remove specific large files from all history:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>filter-repo<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--path<span class="w"> </span>path/to/large-image.png<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--path<span class="w"> </span>path/to/old-large-directory/<span class="w"> </span><span class="se">\</span>
+<span class="w">  </span>--invert-paths
+</pre></div>
+</div>
+<p>Or remove every blob larger than a threshold, for example <code class="docutils literal notranslate"><span class="pre">10M</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>filter-repo<span class="w"> </span>--strip-blobs-bigger-than<span class="w"> </span>10M
+</pre></div>
+</div>
+<p>Then aggressively repack:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>reflog<span class="w"> </span>expire<span class="w"> </span>--expire<span class="o">=</span>now<span class="w"> </span>--expire-unreachable<span class="o">=</span>now<span class="w"> </span>--all
+<span class="gp">$ </span>git<span class="w"> </span>gc<span class="w"> </span>--prune<span class="o">=</span>now<span class="w"> </span>--aggressive
+<span class="gp">$ </span>git<span class="w"> </span>count-objects<span class="w"> </span>-vH
+<span class="gp">$ </span>du<span class="w"> </span>-sh<span class="w"> </span>.git
+</pre></div>
+</div>
+<p>Finally force-push rewritten branches:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease<span class="w"> </span>origin<span class="w"> </span>main
+<span class="gp">$ </span>git<span class="w"> </span>push<span class="w"> </span>--force-with-lease<span class="w"> </span>origin<span class="w"> </span>dev
+</pre></div>
+</div>
+</section>
+<section id="history-rewrite-warning">
+<h3>History Rewrite Warning<a class="headerlink" href="#history-rewrite-warning" title="Link to this heading">#</a></h3>
+<p>Removing large files from Git history keeps the logical project history, but rewrites commit hashes. Other clones should reclone or carefully reset to the rewritten remote.</p>
+<p>After force-pushing, collaborators should usually run:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>git<span class="w"> </span>fetch<span class="w"> </span>origin
+<span class="gp">$ </span>git<span class="w"> </span>switch<span class="w"> </span>main
+<span class="gp">$ </span>git<span class="w"> </span>reset<span class="w"> </span>--hard<span class="w"> </span>origin/main
+</pre></div>
+</div>
+<p>For a personal repository, recloning is often simpler and safer:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span><span class="nb">cd</span><span class="w"> </span>..
+<span class="gp">$ </span>rm<span class="w"> </span>-rf<span class="w"> </span>&lt;repo&gt;
+<span class="gp">$ </span>git<span class="w"> </span>clone<span class="w"> </span>git@github.com:&lt;user&gt;/&lt;repo&gt;.git
+</pre></div>
+</div>
+</section>
+<section id="best-practice-for-large-images">
+<h3>Best Practice for Large Images<a class="headerlink" href="#best-practice-for-large-images" title="Link to this heading">#</a></h3>
+<p>Do not commit build outputs, generated images, or large binary assets unless they are required source files.</p>
+<p>Add ignored paths to <code class="docutils literal notranslate"><span class="pre">.gitignore</span></code>:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="go">_build/</span>
+<span class="go">.doctrees/</span>
+<span class="go">*.tmp</span>
+<span class="go">*.log</span>
+</pre></div>
+</div>
+<p>For large files that must stay in the project, use Git LFS:</p>
+<div class="highlight-console notranslate"><div class="highlight"><pre><span></span><span class="gp">$ </span>sudo<span class="w"> </span>apt<span class="w"> </span>install<span class="w"> </span>git-lfs
+<span class="gp">$ </span>git<span class="w"> </span>lfs<span class="w"> </span>install
+<span class="gp">$ </span>git<span class="w"> </span>lfs<span class="w"> </span>track<span class="w"> </span><span class="s2">&quot;*.png&quot;</span>
+<span class="gp">$ </span>git<span class="w"> </span>lfs<span class="w"> </span>track<span class="w"> </span><span class="s2">&quot;*.jpg&quot;</span>
+<span class="gp">$ </span>git<span class="w"> </span>add<span class="w"> </span>.gitattributes
+<span class="gp">$ </span>git<span class="w"> </span>commit<span class="w"> </span>-m<span class="w"> </span><span class="s2">&quot;Track large images with Git LFS&quot;</span>
+</pre></div>
+</div>
+<p>Git LFS prevents future large image blobs from being stored directly in normal Git history.</p>
+</section>
+</section>
+</section>
+
+
+                </article>
+              
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="scipy_selected.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">SciPy Selected</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="shell_script.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Shell Script Guide</p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <dialog id="pst-secondary-sidebar-modal"></dialog>
+                <div id="pst-secondary-sidebar" class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+<div
+    id="pst-page-navigation-heading-2"
+    class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> On this page
+  </div>
+  <nav id="pst-page-toc-nav" class="page-toc" aria-labelledby="pst-page-navigation-heading-2">
+    <ul class="pst-show_toc_level nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#git-ssh-setup-guide">Git SSH Setup Guide</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh-key-generation">SSH Key Generation</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ssh-key-link">SSH Key Link</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#login-escape">Login Escape</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configure-git-identity">Configure Git Identity</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#git-branch-recovery">Git Branch Recovery</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remote-branch-recovery">Remote branch recovery</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#local-branch-recovery">Local branch recovery</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#vmware-fusion-ubuntu-ssh-agent-hang">VMware Fusion / Ubuntu SSH Agent Hang</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#problem">Problem</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#confirm-the-key-works">Confirm the Key Works</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#one-session-fix">One-Session Fix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#persistent-shell-fix">Persistent Shell Fix</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#github-ssh-config">GitHub SSH Config</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#verification">Verification</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#tiling-assistant">Tiling Assistant</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#overview">Overview</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#prerequisites">Prerequisites</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#manual-installation-upstream-release">Manual Installation (Upstream Release)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#ubuntu-package-variant">Ubuntu Package Variant</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#enable-extension">Enable Extension</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#id2">Verification</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#configuration">Configuration</a></li>
+</ul>
+</li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#git-storage-cleanup">Git Storage Cleanup</a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#du-command"><code class="docutils literal notranslate"><span class="pre">du</span></code> command</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#check-git-object-storage">Check Git Object Storage</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#safe-prune-without-rewriting-history">Safe Prune Without Rewriting History</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#remove-large-files-from-git-history">Remove Large Files From Git History</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#history-rewrite-warning">History Rewrite Warning</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#best-practice-for-large-images">Best Practice for Large Images</a></li>
+</ul>
+</li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+          </footer>
+        
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script defer src="../_static/scripts/bootstrap.js?digest=55c26ed414f5f8a31ebb"></script>
+<script defer src="../_static/scripts/pydata-sphinx-theme.js?digest=55c26ed414f5f8a31ebb"></script>
+
+  <footer class="bd-footer">
+<div class="bd-footer__inner bd-page-width">
+  
+    <div class="footer-items__start">
+      
+        <div class="footer-item">
+
+  <p class="copyright">
+    
+      © Copyright 2026, Yiming Dai.
+      <br/>
+    
+  </p>
+</div>
+      
+    </div>
+  
+  
+  
+</div>
+
+  </footer>
+  </body>
+</html>

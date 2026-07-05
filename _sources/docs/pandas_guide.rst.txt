@@ -729,7 +729,7 @@ Converting to another time zone:
 
 .. ipython:: python
 
-   ts_utc.tz_convert("US/Eastern")
+   ts_utc.tz_convert("America/New_York")
 
 Converting between time span representations:
 
@@ -923,4 +923,4 @@ Data wrangling with pandas can be referenced through an official `cheatsheet`_.
 
 .. _pandas: https://pandas.pydata.org/docs/index.html
 .. _string methods: https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.Series.str.capitalize.html
-.. _cheatsheet: http://pandas.pydata.org/Pandas_Cheat_Sheet.pdf
+.. _cheatsheet: https://pandas.pydata.org/Pandas_Cheat_Sheet.pdf

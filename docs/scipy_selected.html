@@ -31,10 +31,10 @@
 <link href="../_static/styles/pydata-sphinx-theme.css?digest=55c26ed414f5f8a31ebb" rel="stylesheet" />
 
     <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=03e43079" />
-    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css?v=7f9a90b1" />
+    <link rel="stylesheet" type="text/css" href="../_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="../_static/copybutton.css?v=76b2166b" />
     <link rel="stylesheet" type="text/css" href="../_static/sphinx-design.min.css?v=95c83b7e" />
-    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=83efd11e" />
+    <link rel="stylesheet" type="text/css" href="../_static/css/custom.css?v=24eed9dd" />
   
   <!-- So that users can add custom icons -->
   <script defer src="../_static/scripts/fontawesome.js?digest=55c26ed414f5f8a31ebb"></script>
@@ -55,7 +55,7 @@
     <link rel="icon" href="../_static/favicon.ico"/>
     <link rel="index" title="Index" href="../genindex.html" />
     <link rel="search" title="Search" href="../search.html" />
-    <link rel="next" title="Git Selected" href="git_selected.html" />
+    <link rel="next" title="CLI Selected" href="cli_selected.html" />
     <link rel="prev" title="MATLAB Guide" href="matlab_guide.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
@@ -372,7 +372,7 @@
 <li class="toctree-l1"><a class="reference internal" href="pandas_guide.html">pandas Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="matlab_guide.html">MATLAB Guide</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#">SciPy Selected</a></li>
-<li class="toctree-l1"><a class="reference internal" href="git_selected.html">Git Selected</a></li>
+<li class="toctree-l1"><a class="reference internal" href="cli_selected.html">CLI Selected</a></li>
 <li class="toctree-l1"><a class="reference internal" href="shell_script.html">Shell Script Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="neural_networks.html">Neural Networks Guide</a></li>
 </ul>
@@ -513,14 +513,14 @@
 <span class="gp">In [10]: </span><span class="n">rand</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="gp">In [11]: </span><span class="n">rand</span>
-<span class="gh">Out[11]: </span><span class="go">array([0.719 , 0.8242, 0.5354])</span>
+<span class="gh">Out[11]: </span><span class="go">array([0.1173, 0.1584, 0.0604])</span>
 
 <span class="gp">In [12]: </span><span class="n">sio</span><span class="o">.</span><span class="n">savemat</span><span class="p">(</span><span class="s2">&quot;rand.mat&quot;</span><span class="p">,</span> <span class="p">{</span><span class="s2">&quot;rand&quot;</span> <span class="p">:</span> <span class="n">rand</span><span class="p">})</span>
 
 <span class="gp">In [13]: </span><span class="n">var</span> <span class="o">=</span> <span class="n">sio</span><span class="o">.</span><span class="n">loadmat</span><span class="p">(</span><span class="s2">&quot;rand.mat&quot;</span><span class="p">)</span>
 
 <span class="gp">In [14]: </span><span class="n">var</span><span class="p">[</span><span class="s2">&quot;rand&quot;</span><span class="p">]</span>
-<span class="gh">Out[14]: </span><span class="go">array([[0.719 , 0.8242, 0.5354]])</span>
+<span class="gh">Out[14]: </span><span class="go">array([[0.1173, 0.1584, 0.0604]])</span>
 </pre></div>
 </div>
 <div class="admonition warning">
@@ -579,7 +579,7 @@
 <div class="math notranslate nohighlight">
 \[I = \int^{4}_{0} J_{3.5} (x) dx\]</div>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [15]: </span><span class="n">integrate</span><span class="o">.</span><span class="n">quad</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">special</span><span class="o">.</span><span class="n">jv</span><span class="p">(</span><span class="mf">3.5</span> <span class="p">,</span><span class="n">x</span><span class="p">),</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">4</span><span class="p">)</span>
-<span class="gh">Out[15]: </span><span class="go">(0.4584570300316943, 2.769361245710211e-10)</span>
+<span class="gh">Out[15]: </span><span class="go">(0.45845703003169425, 2.7693612457102117e-10)</span>
 </pre></div>
 </div>
 <p>The return value is a tuple, with the first element holding the estimated value of the integral and the second element holding an upper bound on the error.</p>
@@ -590,13 +590,13 @@
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [16]: </span><span class="n">a</span> <span class="o">=</span> <span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">((</span><span class="mi">3</span><span class="p">,</span> <span class="mi">3</span><span class="p">))</span>
 
 <span class="gp">In [17]: </span><span class="n">linalg</span><span class="o">.</span><span class="n">det</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="gh">Out[17]: </span><span class="go">np.float64(-0.09948043969012788)</span>
+<span class="gh">Out[17]: </span><span class="go">np.float64(-0.16640240286997504)</span>
 
 <span class="gp">In [18]: </span><span class="n">linalg</span><span class="o">.</span><span class="n">inv</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
 <span class="gh">Out[18]: </span>
-<span class="go">array([[-2.6513, -3.4453,  5.9274],</span>
-<span class="go">       [-0.0208,  2.9544, -2.9884],</span>
-<span class="go">       [ 3.0833,  1.593 , -3.1646]])</span>
+<span class="go">array([[ 3.1808, -1.2108, -1.9337],</span>
+<span class="go">       [-0.2604, -1.7762,  1.9826],</span>
+<span class="go">       [-0.9285,  2.0758, -0.1036]])</span>
 </pre></div>
 </div>
 </section>
@@ -615,9 +615,9 @@
 
 <span class="gp">In [24]: </span><span class="n">plt</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="s1">&#39;o&#39;</span><span class="p">,</span> <span class="n">xnew</span><span class="p">,</span> <span class="n">f1</span><span class="p">(</span><span class="n">xnew</span><span class="p">),</span> <span class="s1">&#39;-&#39;</span><span class="p">,</span> <span class="n">xnew</span><span class="p">,</span> <span class="n">f2</span><span class="p">(</span><span class="n">xnew</span><span class="p">),</span> <span class="s1">&#39;--&#39;</span><span class="p">)</span>
 <span class="gh">Out[24]: </span>
-<span class="go">[&lt;matplotlib.lines.Line2D at 0x128f0f8c0&gt;,</span>
-<span class="go"> &lt;matplotlib.lines.Line2D at 0x128f0fa10&gt;,</span>
-<span class="go"> &lt;matplotlib.lines.Line2D at 0x128f0fb60&gt;]</span>
+<span class="go">[&lt;matplotlib.lines.Line2D at 0xfdcd438ae7b0&gt;,</span>
+<span class="go"> &lt;matplotlib.lines.Line2D at 0xfdcd438ae900&gt;,</span>
+<span class="go"> &lt;matplotlib.lines.Line2D at 0xfdcd438aea50&gt;]</span>
 </pre></div>
 </div>
 <img alt="../_images/scipy_interp1d.png" class="align-center" src="../_images/scipy_interp1d.png" />
@@ -674,11 +674,11 @@
       </div>
     </a>
     <a class="right-next"
-       href="git_selected.html"
+       href="cli_selected.html"
        title="next page">
       <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Git Selected</p>
+        <p class="prev-next-title">CLI Selected</p>
       </div>
       <i class="fa-solid fa-angle-right"></i>
     </a>
@@ -735,7 +735,7 @@
 
   <p class="copyright">
     
-      © Copyright 2021-2026, Yiming Dai.
+      © Copyright 2026, Yiming Dai.
       <br/>
     
   </p>

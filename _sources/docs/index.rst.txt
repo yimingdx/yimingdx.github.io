@@ -15,6 +15,6 @@ An elegant-design and concise guide for selected computer science topics.
    pandas_guide
    matlab_guide
    scipy_selected
-   git_selected
+   cli_selected
    shell_script
    neural_networks

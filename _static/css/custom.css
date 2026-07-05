@@ -141,6 +141,12 @@ table {
     margin-right: auto;
 }
 
+/* Wrap long lines inside Sphinx code blocks only. */
+div.highlight pre {
+  white-space: pre-wrap;
+  word-break: break-word;
+  overflow-wrap: anywhere;
+}
 
 /* Disable content selection safely.
    Keep inputs, textareas, code blocks, and buttons selectable/usable. */

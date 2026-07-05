@@ -19,28 +19,10 @@
 Yiming Dai /base
 =================
 
-.. grid:: 1 1 2 2
-    :gutter: 2
-    :padding: 0
+:Last Updated: |today|
+:Version: |version|
 
-    .. grid-item::
-        :columns: 12 12 6 6
-        :class: sd-d-flex-column sd-p-0 sd-pt-2 sd-pe-2
-
-        **Last Updated**: |today|   **Version**: |version|
-
-        An avid lifelong learner in applied mathematics and computer science.
-        
-        Quantitative Strategist @ Deutsche Bank.
-
-    .. grid-item::
-        :columns: 12 12 6 6
-        :class: sd-p-0 sd-pt-2 sd-ps-2
-
-        .. image:: _static/img/profile.png
-           :class: profile-image
-           :alt: Profile photo
-
+Quantitative Strategist focused on Python/C++ quant engineering, numerical analytics, and high-performance trading infrastructure.
 
 .. grid:: 1 1 2 2
     :gutter: 3
@@ -52,7 +34,7 @@ Yiming Dai /base
         :img-alt: Computer Science Docs
         :class-card: intro-card sd-text-center
 
-        Elegently-designed notes on computer science and applied data science fundamentals.
+        Elegantly-designed notes on computer science and applied data science fundamentals.
 
         +++
 
@@ -80,4 +62,4 @@ Yiming Dai /base
             :expand:
             :click-parent:
 
-            To the finance
+            To the quant docs
