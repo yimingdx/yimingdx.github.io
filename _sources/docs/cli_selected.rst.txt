@@ -623,3 +623,93 @@ For large files that must stay in the project, use Git LFS:
     $ git commit -m "Track large images with Git LFS"
 
 Git LFS prevents future large image blobs from being stored directly in normal Git history.
+
+Git: Merging Branches with Unrelated Histories
+----------------------------------------------
+
+A normal merge fails with::
+
+    fatal: refusing to merge unrelated histories
+
+This occurs when two branches do not share a common ancestor.
+
+Inspect the History
+~~~~~~~~~~~~~~~~~~~
+
+Use::
+
+    git log --graph --oneline --decorate --all
+
+Confirm whether the branches have separate root histories.
+
+Option 1: Merge Both Histories
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use when both complete histories must be preserved::
+
+    git switch <target-branch>
+    git merge <source-branch> --allow-unrelated-histories
+
+After resolving conflicts::
+
+    git add <files>
+    git commit
+    git push origin <target-branch>
+
+This creates a merge commit connecting the two independent histories.
+
+Option 2: Replay Relevant Commits onto the Correct Base
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Use when one branch contains accidental or duplicated repository history and only selected commits should be retained::
+
+    git switch <source-branch>
+    git rebase --onto <new-base> <exclude-through> <branch>
+
+Git takes commits reachable from ``<branch>`` but not from
+``<exclude-through>`` and replays them onto ``<new-base>``.
+
+Example
+~~~~~~~
+
+Given::
+
+    source:  A---B---C---D---E
+    target:  X---Y
+
+To replay only ``C``, ``D``, and ``E`` onto ``Y``::
+
+    git rebase --onto target B source
+
+Result::
+
+    X---Y---C'---D'---E'
+
+The apostrophes indicate new commit objects with rewritten commit IDs.
+
+Push After Rebase
+~~~~~~~~~~~~~~~~~
+
+Because rebase rewrites commit history::
+
+    git push --force-with-lease origin <source-branch>
+
+Decision Guide
+~~~~~~~~~~~~~~
+
+Use ``merge --allow-unrelated-histories`` when both histories are intentional
+and must remain visible.
+
+Use ``rebase --onto`` when one history is accidental, duplicated, or contains
+only a subset of commits worth preserving.
+
+Switch - Merge - Push - Delete Branch
+-------------------------------------
+
+Git command to switch to ``main`` branch, merge ``dev`` branch, push origin, and delete ``dev`` branch both locally and remotely::
+
+    git switch main &&
+    git merge vector_2d &&
+    git push origin main &&
+    git branch -d vector_2d &&
+    git push origin --delete vector_2d
