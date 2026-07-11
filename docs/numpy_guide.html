@@ -8,6 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <meta property="article:modified_time" content="2026-05-01T23:29:00+01:00" />
     <title>Numpy Guide</title>
   
   
@@ -58,6 +59,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="1.2.0-rc1" />
+    <meta name="docbuild:last-update" content="May 01, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -373,6 +375,7 @@
 <li class="toctree-l1"><a class="reference internal" href="cli_selected.html">CLI Selected</a></li>
 <li class="toctree-l1"><a class="reference internal" href="shell_script.html">Shell Script Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="neural_networks.html">Neural Networks Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_qa.html">Python Q&amp;A</a></li>
 </ul>
 </div>
 </nav></div>
@@ -591,25 +594,25 @@
 <p>and illustrate common usages for uniform and (standard) normal distribution</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># uniform distribution with half-open interval (default)</span>
 <span class="gp">In [36]: </span><span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">int64</span><span class="p">)</span> <span class="c1"># U[0,6)</span>
-<span class="gh">Out[36]: </span><span class="go">array([2, 0, 4, 4, 4, 4])</span>
+<span class="gh">Out[36]: </span><span class="go">array([3, 0, 1, 0, 5, 5])</span>
 
 <span class="go"># closed-interval uniform distribution</span>
 <span class="gp">In [37]: </span><span class="n">rng</span><span class="o">.</span><span class="n">integers</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">endpoint</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span> <span class="c1"># U[0,6]</span>
-<span class="gh">Out[37]: </span><span class="go">array([4, 1, 6, 0, 3, 6])</span>
+<span class="gh">Out[37]: </span><span class="go">array([5, 4, 5, 5, 1, 4])</span>
 
 <span class="gp">In [38]: </span><span class="n">rng</span><span class="o">.</span><span class="n">random</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span> <span class="c1"># U[0,1)</span>
-<span class="gh">Out[38]: </span><span class="go">array([0.9389, 0.2554, 0.2961, 0.7556, 0.5769])</span>
+<span class="gh">Out[38]: </span><span class="go">array([0.8145, 0.6043, 0.9053, 0.5743, 0.7954])</span>
 
 <span class="gp">In [39]: </span><span class="n">rng</span><span class="o">.</span><span class="n">uniform</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="mi">6</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span> <span class="c1"># U[0,6)</span>
 <span class="gh">Out[39]: </span>
-<span class="go">array([[3.1536, 5.0204, 1.1024, 3.9934, 3.9853, 5.7788],</span>
-<span class="go">       [4.6151, 1.1005, 1.7442, 4.7126, 5.8153, 2.9394]])</span>
+<span class="go">array([[5.5698, 2.6388, 4.4997, 4.1717, 4.8915, 2.6931],</span>
+<span class="go">       [5.13  , 4.3912, 4.2337, 4.0661, 5.2958, 5.2866]])</span>
 
 <span class="gp">In [40]: </span><span class="n">rng</span><span class="o">.</span><span class="n">normal</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="mi">5</span><span class="p">,</span> <span class="n">scale</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span> <span class="c1"># N(5,2)</span>
-<span class="gh">Out[40]: </span><span class="go">array([6.1744, 4.7031, 7.4628, 5.1055, 7.2064, 2.365 ])</span>
+<span class="gh">Out[40]: </span><span class="go">array([2.014 , 4.0654, 4.2618, 5.4359, 4.9171, 4.9355])</span>
 
 <span class="gp">In [41]: </span><span class="n">rng</span><span class="o">.</span><span class="n">standard_normal</span><span class="p">(</span><span class="n">size</span><span class="o">=</span><span class="mi">6</span><span class="p">)</span> <span class="c1"># N(0,1)</span>
-<span class="gh">Out[41]: </span><span class="go">array([1.2148, 1.1389, 0.9397, 0.5492, 0.4745, 0.6214])</span>
+<span class="gh">Out[41]: </span><span class="go">array([ 0.0264,  1.0294, -1.7418, -0.6687, -0.3405, -1.4785])</span>
 </pre></div>
 </div>
 <p>For more information about <code class="docutils literal notranslate"><span class="pre">default_rng</span></code>, check out the official documentation for <a class="reference external" href="https://numpy.org/doc/stable/reference/random/generator.html">default_rng</a>.</p>
@@ -2276,6 +2279,11 @@ over the means).</strong></p>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#miscellaneous">Miscellaneous</a></li>
 </ul>
   </nav></div>
+
+  <div class="sidebar-secondary-item"><p class="last-updated">
+  Last updated on May 01, 2026.
+  <br/>
+</p></div>
 
 </div></div>
               

@@ -120,7 +120,7 @@ Instead of passing the memo as a parameter, we could use higher-order functions 
         if n == 0 or n == 1:
             return n
         else:
-            return fib(n-2) + fib(n-1)
+            return fib(n - 2) + fib(n - 1)
 
     def count(f):
         def counted(*args):
@@ -144,11 +144,27 @@ Instead of passing the memo as a parameter, we could use higher-order functions 
     21891
 
     >>> counted_fib = count(fib)
-    >>> fib  = memo(counted_fib)
+    >>> fib = memo(counted_fib)
     >>> fib(20)
     6765
     >>> counted_fib.call_count
     21
+
+For production code, Python provides ``functools.cache`` and ``functools.lru_cache``.
+
+.. code-block:: python
+
+    from functools import cache, lru_cache
+
+    @cache
+    def fib(n):
+        if n < 2:
+            return n
+        return fib(n - 1) + fib(n - 2)
+
+    @lru_cache(maxsize=None)
+    def fib(n):
+        ...
 
 Lambda expression
 -------------------------
@@ -203,11 +219,10 @@ A lambda function's parent is the current frame in which the lambda expression i
 Decorator
 -------------------------
 
-The decorator is a design pattern that adds additional functionality to a function without modifying its structure. Use ``@`` following decorator function name as a decorator preceding the applied function.
+A decorator is a callable that takes a function or class and returns a replacement object. Decorators are commonly used to wrap functions with additional behavior without changing the function body.
 
 .. ipython:: python
 
-    # decorator function definition
     def trace(f):
         def traced(x, y):
             print("calling", f, "on arguments", x, y)
@@ -258,7 +273,7 @@ Another example of tracing the summation at each step.
 Mutation
 -------------------------
 
-Tuple is an immutable and hashable sequence, in which it can be keys in the dictionary.
+A tuple is an immutable sequence. It is hashable only when all of its elements are hashable, in which case it can be used as a dictionary key.
 
 .. ipython:: python
 
@@ -271,7 +286,7 @@ However, an immutable sequence may still change if it contains a mutable value a
     s = ([0, 0], 0)
     s[0][0] = 1; s
 
-``is`` identity operator evaluates to ``True`` if both operands evaluate to the **same object**. Instead, ``==`` evaluates to ``True`` if both operands evaluate to **equal values**, but not the memory address.
+The ``is`` operator tests object identity: it is true when both operands refer to the same object. The ``==`` operator tests value equality according to the objects' equality implementation.
 
 .. ipython:: python
 
@@ -280,7 +295,7 @@ However, an immutable sequence may still change if it contains a mutable value a
     a is b
     a == b
 
-Default value of a function parameter is dangerous since only one object will be created when the function is defined.
+Mutable default argument values can be dangerous because default expressions are evaluated only once, when the function is defined. The same object is therefore reused across calls that omit the argument.
 
 .. ipython:: python
 
@@ -295,7 +310,7 @@ Default value of a function parameter is dangerous since only one object will be
 Iterators
 -------------------------
 
-A container can provide an iterator that provides access to its elements in certain order. An iterator behaves like an pointer pointing to an element in the container. ``iter`` initializes a iterator and ``next`` returns the value of the current element and proceeds the pointer.
+An iterator is an object that produces values one at a time. It implements ``__iter__`` and ``__next__`` and maintains whatever internal state is needed to produce the next value. ``iter`` obtains an iterator from an iterable, while ``next`` asks the iterator for its next value.
 
 .. ipython:: python
 
@@ -339,7 +354,7 @@ Dictionary iterators become invalid if the structure or length of the dictionary
 
 ..  attention::
 
-    As of Python 3.7, dictionaries are guaranteed insertion ordered.
+    Since Python 3.7, dictionaries are guaranteed to preserve insertion order. In CPython 3.6, this behavior existed as an implementation detail but was not yet a language guarantee.
 
 A ``for`` loop can be used to process an iterable. Compared with an iterable like ``list``, an iterator proceeds in only one direction until reach the end.
 
@@ -355,7 +370,7 @@ Python iterator does not provide a function, like ``hasNext`` in Java, to check 
 
     next(it, -1)
    
-Python provides built-in functions for iteration, and many built-in sequence operatios return iterators that compute results lazily, i.e. producing the next result one at a time, such as ``map``, ``filter``, ``zip``, ``reversed``.
+Several built-in functions return lazy iterators, including ``map``, ``filter``, ``zip``, and ``reversed``.
 
 .. ipython:: python
 
@@ -373,10 +388,12 @@ Be careful when you think you are comparing two lists, when one is actually a it
     reversed(a)
     list(reversed(a)) == a
 
-The ``zip`` function only iterates over matches and skips extras and more than two iterables can be passed to.
+The ``zip`` function creates element-wise combinations with two or more iterables. By default, ``zip`` stops when the shortest iterable is exhausted, so extra elements from longer iterables are ignored. Since Python 3.10, ``strict=True`` can be used to raise ``ValueError`` when the iterables have different lengths.
 
 .. ipython:: python
 
+    # list(zip([1, 2], ["a"], strict=True))
+    # ValueError: zip() argument 2 is shorter than argument 1
     list(zip([1, 2], [1, 2, 3], [1, 2]))
 
 Generator
@@ -394,7 +411,7 @@ Generator is a special kind of iterator create automatically by calling a genera
 
 .. tip::
 
-    Using ``yield`` is convenient when you want to inspect or process a few data records from a large data source. Its laziness saves memory and reduces running time.
+    Using ``yield`` is convenient when you want to inspect or process a few data records from a large data source. Its lazy behavior can reduce memory usage and avoid computing values that are never consumed. It may also reduce the time needed to obtain the first few results, though it does not necessarily reduce total execution time.
 
 A ``yield from`` statement yields all values from an iterator or iterable. The following two functions behave the same.
 
@@ -496,8 +513,8 @@ If we want to multiply the result of a factorial by a constant ``k``, and put ``
 .. code-block:: python
 
     def fact_times(n, k):
-        """Return k * n * n-1 * ... * 1.
-
+        """
+        Return k multiplied by n factorial.
         >>> fact_times(4, 3)
         72
         """

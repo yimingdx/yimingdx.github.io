@@ -8,6 +8,7 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
 
+    <meta property="article:modified_time" content="2026-06-30T18:30:00+01:00" />
     <title>Python Selected</title>
   
   
@@ -60,6 +61,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
   <meta name="docsearch:version" content="1.2.0-rc1" />
+    <meta name="docbuild:last-update" content="June 30, 2026"/>
   
     
     <script src="../_static/searchtools.js"></script>
@@ -375,6 +377,7 @@
 <li class="toctree-l1"><a class="reference internal" href="cli_selected.html">CLI Selected</a></li>
 <li class="toctree-l1"><a class="reference internal" href="shell_script.html">Shell Script Guide</a></li>
 <li class="toctree-l1"><a class="reference internal" href="neural_networks.html">Neural Networks Guide</a></li>
+<li class="toctree-l1"><a class="reference internal" href="python_qa.html">Python Q&amp;A</a></li>
 </ul>
 </div>
 </nav></div>
@@ -529,7 +532,7 @@
     <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span> <span class="ow">or</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">1</span><span class="p">:</span>
         <span class="k">return</span> <span class="n">n</span>
     <span class="k">else</span><span class="p">:</span>
-        <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span><span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span>
 
 <span class="k">def</span><span class="w"> </span><span class="nf">count</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
     <span class="k">def</span><span class="w"> </span><span class="nf">counted</span><span class="p">(</span><span class="o">*</span><span class="n">args</span><span class="p">):</span>
@@ -553,11 +556,25 @@
 <span class="mi">21891</span>
 
 <span class="o">&gt;&gt;&gt;</span> <span class="n">counted_fib</span> <span class="o">=</span> <span class="n">count</span><span class="p">(</span><span class="n">fib</span><span class="p">)</span>
-<span class="o">&gt;&gt;&gt;</span> <span class="n">fib</span>  <span class="o">=</span> <span class="n">memo</span><span class="p">(</span><span class="n">counted_fib</span><span class="p">)</span>
+<span class="o">&gt;&gt;&gt;</span> <span class="n">fib</span> <span class="o">=</span> <span class="n">memo</span><span class="p">(</span><span class="n">counted_fib</span><span class="p">)</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">fib</span><span class="p">(</span><span class="mi">20</span><span class="p">)</span>
 <span class="mi">6765</span>
 <span class="o">&gt;&gt;&gt;</span> <span class="n">counted_fib</span><span class="o">.</span><span class="n">call_count</span>
 <span class="mi">21</span>
+</pre></div>
+</div>
+<p>For production code, Python provides <code class="docutils literal notranslate"><span class="pre">functools.cache</span></code> and <code class="docutils literal notranslate"><span class="pre">functools.lru_cache</span></code>.</p>
+<div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span><span class="w"> </span><span class="nn">functools</span><span class="w"> </span><span class="kn">import</span> <span class="n">cache</span><span class="p">,</span> <span class="n">lru_cache</span>
+
+<span class="nd">@cache</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="k">if</span> <span class="n">n</span> <span class="o">&lt;</span> <span class="mi">2</span><span class="p">:</span>
+        <span class="k">return</span> <span class="n">n</span>
+    <span class="k">return</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)</span> <span class="o">+</span> <span class="n">fib</span><span class="p">(</span><span class="n">n</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span>
+
+<span class="nd">@lru_cache</span><span class="p">(</span><span class="n">maxsize</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+<span class="k">def</span><span class="w"> </span><span class="nf">fib</span><span class="p">(</span><span class="n">n</span><span class="p">):</span>
+    <span class="o">...</span>
 </pre></div>
 </div>
 </section>
@@ -615,9 +632,8 @@
 </section>
 <section id="decorator">
 <h3>Decorator<a class="headerlink" href="#decorator" title="Link to this heading">#</a></h3>
-<p>The decorator is a design pattern that adds additional functionality to a function without modifying its structure. Use <code class="docutils literal notranslate"><span class="pre">&#64;</span></code> following decorator function name as a decorator preceding the applied function.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># decorator function definition</span>
-<span class="gp">In [19]: </span><span class="k">def</span><span class="w"> </span><span class="nf">trace</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
+<p>A decorator is a callable that takes a function or class and returns a replacement object. Decorators are commonly used to wrap functions with additional behavior without changing the function body.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [19]: </span><span class="k">def</span><span class="w"> </span><span class="nf">trace</span><span class="p">(</span><span class="n">f</span><span class="p">):</span>
 <span class="gp">   ....: </span>    <span class="k">def</span><span class="w"> </span><span class="nf">traced</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">):</span>
 <span class="gp">   ....: </span>        <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;calling&quot;</span><span class="p">,</span> <span class="n">f</span><span class="p">,</span> <span class="s2">&quot;on arguments&quot;</span><span class="p">,</span> <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
 <span class="gp">   ....: </span>        <span class="k">return</span> <span class="n">f</span><span class="p">(</span><span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">)</span>
@@ -630,7 +646,7 @@
 <span class="gp">   ....: </span>
 
 <span class="gp">In [21]: </span><span class="n">mul</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
-<span class="go">calling &lt;function mul at 0xf91c281fb060&gt; on arguments 2 3</span>
+<span class="go">calling &lt;function mul at 0xf0314f010250&gt; on arguments 2 3</span>
 <span class="gh">Out[21]: </span><span class="go">6</span>
 </pre></div>
 </div>
@@ -676,7 +692,7 @@
 </section>
 <section id="mutation">
 <h3>Mutation<a class="headerlink" href="#mutation" title="Link to this heading">#</a></h3>
-<p>Tuple is an immutable and hashable sequence, in which it can be keys in the dictionary.</p>
+<p>A tuple is an immutable sequence. It is hashable only when all of its elements are hashable, in which case it can be used as a dictionary key.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [26]: </span><span class="p">{(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">):</span> <span class="mi">1</span><span class="p">}</span>
 <span class="gh">Out[26]: </span><span class="go">{(1, 1): 1}</span>
 </pre></div>
@@ -688,7 +704,7 @@
 <span class="gh">Out[28]: </span><span class="go">([1, 0], 0)</span>
 </pre></div>
 </div>
-<p><code class="docutils literal notranslate"><span class="pre">is</span></code> identity operator evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code> if both operands evaluate to the <strong>same object</strong>. Instead, <code class="docutils literal notranslate"><span class="pre">==</span></code> evaluates to <code class="docutils literal notranslate"><span class="pre">True</span></code> if both operands evaluate to <strong>equal values</strong>, but not the memory address.</p>
+<p>The <code class="docutils literal notranslate"><span class="pre">is</span></code> operator tests object identity: it is true when both operands refer to the same object. The <code class="docutils literal notranslate"><span class="pre">==</span></code> operator tests value equality according to the objects’ equality implementation.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [29]: </span><span class="n">a</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
 
 <span class="gp">In [30]: </span><span class="n">b</span> <span class="o">=</span> <span class="p">[</span><span class="mi">0</span><span class="p">]</span>
@@ -700,7 +716,7 @@
 <span class="gh">Out[32]: </span><span class="go">True</span>
 </pre></div>
 </div>
-<p>Default value of a function parameter is dangerous since only one object will be created when the function is defined.</p>
+<p>Mutable default argument values can be dangerous because default expressions are evaluated only once, when the function is defined. The same object is therefore reused across calls that omit the argument.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [33]: </span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">s</span><span class="o">=</span><span class="p">[]):</span>
 <span class="gp">   ....: </span>    <span class="n">s</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="mi">0</span><span class="p">)</span>
 <span class="gp">   ....: </span>    <span class="nb">print</span><span class="p">(</span><span class="n">s</span><span class="p">)</span>
@@ -719,7 +735,7 @@
 </section>
 <section id="iterators">
 <h3>Iterators<a class="headerlink" href="#iterators" title="Link to this heading">#</a></h3>
-<p>A container can provide an iterator that provides access to its elements in certain order. An iterator behaves like an pointer pointing to an element in the container. <code class="docutils literal notranslate"><span class="pre">iter</span></code> initializes a iterator and <code class="docutils literal notranslate"><span class="pre">next</span></code> returns the value of the current element and proceeds the pointer.</p>
+<p>An iterator is an object that produces values one at a time. It implements <code class="docutils literal notranslate"><span class="pre">__iter__</span></code> and <code class="docutils literal notranslate"><span class="pre">__next__</span></code> and maintains whatever internal state is needed to produce the next value. <code class="docutils literal notranslate"><span class="pre">iter</span></code> obtains an iterator from an iterable, while <code class="docutils literal notranslate"><span class="pre">next</span></code> asks the iterator for its next value.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [36]: </span><span class="n">a</span> <span class="o">=</span> <span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">,</span> <span class="mi">4</span><span class="p">]</span>
 
 <span class="gp">In [37]: </span><span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
@@ -759,7 +775,7 @@
 </div>
 <div class="admonition attention">
 <p class="admonition-title">Attention</p>
-<p>As of Python 3.7, dictionaries are guaranteed insertion ordered.</p>
+<p>Since Python 3.7, dictionaries are guaranteed to preserve insertion order. In CPython 3.6, this behavior existed as an implementation detail but was not yet a language guarantee.</p>
 </div>
 <p>A <code class="docutils literal notranslate"><span class="pre">for</span></code> loop can be used to process an iterable. Compared with an iterable like <code class="docutils literal notranslate"><span class="pre">list</span></code>, an iterator proceeds in only one direction until reach the end.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [40]: </span><span class="n">it</span> <span class="o">=</span> <span class="nb">iter</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">])</span>
@@ -776,7 +792,7 @@
 <span class="gh">Out[42]: </span><span class="go">-1</span>
 </pre></div>
 </div>
-<p>Python provides built-in functions for iteration, and many built-in sequence operatios return iterators that compute results lazily, i.e. producing the next result one at a time, such as <code class="docutils literal notranslate"><span class="pre">map</span></code>, <code class="docutils literal notranslate"><span class="pre">filter</span></code>, <code class="docutils literal notranslate"><span class="pre">zip</span></code>, <code class="docutils literal notranslate"><span class="pre">reversed</span></code>.</p>
+<p>Several built-in functions return lazy iterators, including <code class="docutils literal notranslate"><span class="pre">map</span></code>, <code class="docutils literal notranslate"><span class="pre">filter</span></code>, <code class="docutils literal notranslate"><span class="pre">zip</span></code>, and <code class="docutils literal notranslate"><span class="pre">reversed</span></code>.</p>
 <div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [43]: </span><span class="n">m</span> <span class="o">=</span> <span class="nb">map</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">*</span> <span class="n">x</span><span class="p">,</span> <span class="nb">range</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="mi">10</span><span class="p">))</span>
 
 <span class="gp">In [44]: </span><span class="n">f</span> <span class="o">=</span> <span class="nb">filter</span><span class="p">(</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="n">x</span> <span class="o">&gt;=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">m</span><span class="p">)</span>
@@ -795,14 +811,16 @@
 <span class="gh">Out[48]: </span><span class="go">False</span>
 
 <span class="gp">In [49]: </span><span class="nb">reversed</span><span class="p">(</span><span class="n">a</span><span class="p">)</span>
-<span class="gh">Out[49]: </span><span class="go">&lt;list_reverseiterator at 0xf91c2812ad40&gt;</span>
+<span class="gh">Out[49]: </span><span class="go">&lt;list_reverseiterator at 0xf0314f1b04f0&gt;</span>
 
 <span class="gp">In [50]: </span><span class="nb">list</span><span class="p">(</span><span class="nb">reversed</span><span class="p">(</span><span class="n">a</span><span class="p">))</span> <span class="o">==</span> <span class="n">a</span>
 <span class="gh">Out[50]: </span><span class="go">True</span>
 </pre></div>
 </div>
-<p>The <code class="docutils literal notranslate"><span class="pre">zip</span></code> function only iterates over matches and skips extras and more than two iterables can be passed to.</p>
-<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="gp">In [51]: </span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
+<p>The <code class="docutils literal notranslate"><span class="pre">zip</span></code> function creates element-wise combinations with two or more iterables. By default, <code class="docutils literal notranslate"><span class="pre">zip</span></code> stops when the shortest iterable is exhausted, so extra elements from longer iterables are ignored. Since Python 3.10, <code class="docutils literal notranslate"><span class="pre">strict=True</span></code> can be used to raise <code class="docutils literal notranslate"><span class="pre">ValueError</span></code> when the iterables have different lengths.</p>
+<div class="highlight-ipython notranslate"><div class="highlight"><pre><span></span><span class="go"># list(zip([1, 2], [&quot;a&quot;], strict=True))</span>
+<span class="go"># ValueError: zip() argument 2 is shorter than argument 1</span>
+<span class="gp">In [51]: </span><span class="nb">list</span><span class="p">(</span><span class="nb">zip</span><span class="p">([</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">],</span> <span class="p">[</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">]))</span>
 <span class="gh">Out[51]: </span><span class="go">[(1, 1, 1), (2, 2, 2)]</span>
 </pre></div>
 </div>
@@ -820,7 +838,7 @@
 </div>
 <div class="admonition tip">
 <p class="admonition-title">Tip</p>
-<p>Using <code class="docutils literal notranslate"><span class="pre">yield</span></code> is convenient when you want to inspect or process a few data records from a large data source. Its laziness saves memory and reduces running time.</p>
+<p>Using <code class="docutils literal notranslate"><span class="pre">yield</span></code> is convenient when you want to inspect or process a few data records from a large data source. Its lazy behavior can reduce memory usage and avoid computing values that are never consumed. It may also reduce the time needed to obtain the first few results, though it does not necessarily reduce total execution time.</p>
 </div>
 <p>A <code class="docutils literal notranslate"><span class="pre">yield</span> <span class="pre">from</span></code> statement yields all values from an iterator or iterable. The following two functions behave the same.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">f</span><span class="p">(</span><span class="n">a</span><span class="p">):</span>
@@ -909,8 +927,8 @@
 </div>
 <p>If we want to multiply the result of a factorial by a constant <code class="docutils literal notranslate"><span class="pre">k</span></code>, and put <code class="docutils literal notranslate"><span class="pre">k</span></code> as a parameter, recursion is used.</p>
 <div class="highlight-python notranslate"><div class="highlight"><pre><span></span><span class="k">def</span><span class="w"> </span><span class="nf">fact_times</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">k</span><span class="p">):</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Return k * n * n-1 * ... * 1.</span>
-
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Return k multiplied by n factorial.</span>
 <span class="sd">    &gt;&gt;&gt; fact_times(4, 3)</span>
 <span class="sd">    72</span>
 <span class="sd">    &quot;&quot;&quot;</span>
@@ -1481,6 +1499,11 @@
 </li>
 </ul>
   </nav></div>
+
+  <div class="sidebar-secondary-item"><p class="last-updated">
+  Last updated on June 30, 2026.
+  <br/>
+</p></div>
 
 </div></div>
               

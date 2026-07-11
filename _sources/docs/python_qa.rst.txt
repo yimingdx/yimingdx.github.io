@@ -1,0 +1,85 @@
+.. _python_qa:
+
+=========================
+Python Q&A
+=========================
+
+Basic Python questions and answers for interview.
+
+What are the differences between ``tuple`` and ``list``?
+--------------------------------------------------------
+
+The key distinction is mutability:
+
+* ``tuple`` is immutable: its sequence of element references cannot change after creation.
+* ``list`` is mutable: elements can be replaced, appended, removed, or reordered.
+
+Tuple immutability applies to the tuple structure, not recursively to referenced
+objects:
+
+.. code-block:: python
+
+   t = ([1, 2], 3)
+   # TypeError
+   t[0] = 10 
+   # valid
+   t[0].append(4)
+
+   assert t == ([1, 2, 4], 3)
+
+This distinction matters for hashing:
+
+.. code-block:: python
+
+   d = {(1, 2): "ok"}
+   # TypeError: unhashable type: 'list'
+   d = {([1, 2], 3): "bad"}
+
+A tuple is immutable, but not necessarily hashable, because it may contain unhashable objects. A tuple is hashable only if all objects involved in its hash are themselves
+hashable.
+
+Why can a ``tuple`` be cheaper to create than a ``list``?
+------------------------------------------------------------------
+
+Consider:
+
+.. code-block:: python
+
+   def make_tuple():
+       return (1, 2, 3)
+
+   def make_list():
+       return [1, 2, 3]
+
+In CPython, a tuple consisting **entirely** of compile-time constants may be stored as
+a single constant in the function's code object.
+
+Conceptually, ``make_tuple`` may execute something like:
+
+.. code-block:: text
+
+   LOAD_CONST  ((1, 2, 3))
+   RETURN_VALUE
+
+The tuple already be materialized in the code object's constant table, so execution just loads a reference to that object.
+
+The list cannot normally be shared this way because it is mutable. Each execution
+must produce independent fresh instance. Therefore, list creation normally requires runtime construction.
+
+In contrast, ``(x, 2, 3)`` requires runtime construction as the value of ``x`` is known only at runtime. Also, constant folding optimization depends on complier, Python version, etc.
+
+Why does a ``tuple`` usually use less memory than a ``list``?
+-------------------------------------------------------------
+
+A tuple has fixed length after creation. A list must support efficient growth. Repeatedly allocating a new exact-sized array on every ``append`` would be expensive. CPython lists therefore generally maintain spare capacity through overallocation. A tuple does not need spare capacity. Therefore, for the same number of elements, a tuple usually has lower container overhead.
+
+Runtime implications:
+
+* tuples usually have lower container overhead
+* a constant tuple may avoid repeated container allocation
+* lists support mutation and amortized efficient ``append``
+* list growth may occasionally trigger allocation and copying of references
+* both containers normally store object references
+* integer indexing is typically ``O(1)``
+
+

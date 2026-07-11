@@ -18,3 +18,4 @@ An elegant-design and concise guide for selected computer science topics.
    cli_selected
    shell_script
    neural_networks
+   python_qa
